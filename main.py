@@ -27,7 +27,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/dashboard-app", StaticFiles(directory="dashboard-app/dist"), name="dashboard-app-static")
 
 @app.get("/{path:path}", response_class=HTMLResponse)
-def not_found_path(request: Request):
+def redirect_route(request: Request):
   return templates.TemplateResponse(
     request=request,
     name="not-found.html"

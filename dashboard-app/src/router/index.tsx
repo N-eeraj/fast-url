@@ -1,5 +1,6 @@
 import { createBrowserRouter, Outlet } from 'react-router'
 import authRoutes from '@router/auth'
+import dashboardRoutes from '@router/dashboard'
 import NotFound from '@pages/not-found'
 
 const router = createBrowserRouter([
@@ -8,10 +9,7 @@ const router = createBrowserRouter([
     Component: Outlet,
     children: [
       ...authRoutes,
-      {
-        index: true,
-        Component: NotFound,
-      },
+      ...dashboardRoutes,
       {
         path: '*',
         Component: NotFound,

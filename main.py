@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
-dashboard_app = Jinja2Templates(directory="dashboard-app/dist")
+dashboard_app_template = Jinja2Templates(directory="dashboard-app/dist")
 
 @app.get("/", response_class=HTMLResponse)
 def landing_page(request: Request):
@@ -15,11 +15,21 @@ def landing_page(request: Request):
     name="index.html"
   )
 
+@app.get("/app/{path:path}", response_class=HTMLResponse)
 @app.get("/app", response_class=HTMLResponse)
-def landing_page(request: Request):
-  return dashboard_app.TemplateResponse(
+def dashboard_app(request: Request):
+  return dashboard_app_template.TemplateResponse(
     request=request,
     name="index.html"
   )
 
-app.mount("/dashboard-app", StaticFiles(directory="dashboard-app/dist"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/dashboard-app", StaticFiles(directory="dashboard-app/dist"), name="dashboard-app-static")
+
+@app.get("/{path:path}", response_class=HTMLResponse)
+def not_found_path(request: Request):
+  return templates.TemplateResponse(
+    request=request,
+    name="not-found.html"
+  )
+

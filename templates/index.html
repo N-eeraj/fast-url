@@ -1,13 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>
     Fast URL
   </title>
+  <link href="{{ url_for('static', path='/styles/main.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', path='/styles/index.css') }}" rel="stylesheet">
 </head>
+
 <body>
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, dolorem!
+  <main class="container">
+    <!-- NAV -->
+    <nav>
+      <div class="logo">
+        <span>
+          Fast
+        </span>
+        <img src="{{ url_for('static', path='/images/logo.svg') }}" alt="logo" />
+        <span>
+          URL
+        </span>
+      </div>
+      <div class="auth">
+        <a href="/app/register">
+          <button class="btn btn-primary">
+            Sign Up
+          </button>
+        </a>
+        <a href="/app/login">
+          <button class="btn btn-secondary">
+            Login
+          </button>
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <h1>
+        Short links for <span>modern apps</span>
+      </h1>
+      <p>
+        Fast URL is a lightning-fast URL shortener built for developers,
+        APIs, and production scale systems.
+      </p>
+    </header>
+
+    <!-- FEATURES -->
+    <ul class="features">
+      <li class="feature">
+        <h3>
+          ⚡ Lightning-Fast Redirects
+        </h3>
+        <p>
+          Short links open immediately with smooth, uninterrupted navigation.
+        </p>
+      </li>
+      <li class="feature">
+        <h3>
+          📊 Simple Stats
+        </h3>
+        <p>
+          View clicks, activity history, and performance insights.
+        </p>
+      </li>
+      <li class="feature">
+        <h3>
+          🔀 Smart Forwarding
+        </h3>
+        <p>
+          Carry forward URL parameters so destination pages receive full context.
+        </p>
+      </li>
+      <li class="feature">
+        <h3>
+          ♾️ Unlimited Links
+        </h3>
+        <p>
+          Generate unlimited short links without artificial restrictions or account caps.
+        </p>
+      </li>
+      <li class="feature">
+        <h3>
+          🛡️ Privacy First
+        </h3>
+        <p>
+          Track link usage and performance without storing sensitive request data.
+        </p>
+      </li>
+      <li class="feature">
+        <h3>
+          🚦 Built-in Rate Limits
+        </h3>
+        <p>
+          A shared limit of 120 visits per minute per user keeps all links fast and reliable.
+        </p>
+      </li>
+    </ul>
+  </main>
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>
+    Fast URL - Page Not Found
+  </title>
+  <link href="{{ url_for('static', path='/styles/main.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', path='/styles/not-found.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  <main class="page">
+    <div class="content">
+      <div class="code">404</div>
+      <h1>Page not found</h1>
+      <p>
+        The page you’re looking for doesn’t exist, or it has been moved.
+      </p>
+      <div class="actions">
+        <a href="/" class="btn primary">Go Home</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

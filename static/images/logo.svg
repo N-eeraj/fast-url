@@ -1,0 +1,27 @@
+<svg width="120" height="120" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M26 6L14 34H28L22 58L50 26H34L40 6H26Z"
+    fill="url(#grad1)"
+  />
+
+  <path
+    d="M18 42C18 36.477 22.477 32 28 32H30"
+    stroke="#0f172a"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <path
+    d="M46 22C46 27.523 41.523 32 36 32H34"
+    stroke="#0f172a"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <defs>
+    <linearGradient id="grad1" x1="14" y1="6" x2="50" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10b981"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,5 +1,5 @@
 import { Outlet, type RouteObject } from 'react-router'
-import DashboardLayout from '@/layouts/dashboard'
+import DashboardLayout from '@layouts/dashboard'
 import Dashboard from '@pages/dashboard'
 import Profile from '@pages/dashboard/profile'
 import CreateRedirect from '@pages/dashboard/redirect/create'

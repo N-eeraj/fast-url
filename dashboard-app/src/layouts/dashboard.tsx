@@ -5,8 +5,8 @@ import AppBar from '@components/AppBar'
 function DashboardLayout() {
   return (
     <UserContextProvider>
-      <main>
-        <AppBar />
+      <AppBar />
+      <main className="p-4">
         <Outlet />
       </main>
     </UserContextProvider>

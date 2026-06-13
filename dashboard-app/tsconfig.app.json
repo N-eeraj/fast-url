@@ -25,6 +25,7 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"],
       "@router/*": ["./src/router/*"],
+      "@layouts/*": ["./src/layouts/*"],
       "@pages/*": ["./src/pages/*"],
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],

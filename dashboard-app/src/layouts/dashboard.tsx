@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router'
 import UserContextProvider from '@/contexts/User'
-import AppBar from '@components/AppBar'
+import AppBar from '@components/app-bar'
 
 function DashboardLayout() {
   return (

@@ -15,7 +15,7 @@ function UserContextProvider({ children }: PropsWithChildren) {
     queryKey: ['user'],
     queryFn: async () => {
       try {
-        const data = await useApi('/profile')
+        await useApi('/profile')
       } catch (error) {
         navigate('/app/login')
       }

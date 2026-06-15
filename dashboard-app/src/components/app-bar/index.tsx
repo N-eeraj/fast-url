@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
-import { Button } from '@components/ui/button'
-import ThemeToggle from '@components/AppBar/ThemeToggle'
+import Button from '@components/base/Button'
+import ThemeToggle from '@components/app-bar/ThemeToggle'
 
 function AppBar() {
   return (

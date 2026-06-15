@@ -1,13 +1,39 @@
-import { Link } from "react-router"
+import { Link } from 'react-router'
+import Input from '@components/base/Input'
+import Button from '@components/base/Button'
 
 function Login() {
   return (
-    <div className="flex flex-col gap-y-4 divide-y divide-border">
-      <form className="flex flex-col gap-y-4 pb-4">
+    <div className="flex flex-col gap-y-4">
+      <div className="flex flex-col gap-y-4">
         <h3 className="text-2xl font-medium">
           Login
         </h3>
-      </form>
+
+        <form className="space-y-4">
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+          />
+
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+          />
+
+          <Button
+            type="submit"
+            className="w-full">
+            Login
+          </Button>
+        </form>
+      </div>
+
+      <hr />
 
       <div className="flex justify-center items-center gap-x-2">
         <span className="text-muted-foreground">

@@ -1,7 +1,7 @@
 import { createContext, type PropsWithChildren } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
-import useApi from '@/utils/useApi'
+import api from '@/utils/api'
 
 export const UserContext = createContext({})
 
@@ -15,7 +15,7 @@ function UserContextProvider({ children }: PropsWithChildren) {
     queryKey: ['user'],
     queryFn: async () => {
       try {
-        await useApi('/profile')
+        await api('/profile')
       } catch (error) {
         navigate('/app/login')
       }

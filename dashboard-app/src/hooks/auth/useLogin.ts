@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import api from '@/utils/api'
+import api from '@utils/api'
+import { handleSuccess, handleError } from '@utils/toast'
 
 const loginSchema = z.object({
   email: z.email('Please enter a valid email address'),
@@ -22,15 +23,17 @@ function useLogin() {
   })
 
   const mutation = useMutation({
-    mutationFn: async (data: LoginFormValues) => {
+    mutationFn: async (payload: LoginFormValues) => {
       return await api('/auth/login', {
         method: 'POST',
-        body: data,
+        body: payload,
       })
     },
     onSuccess: () => {
+      handleSuccess('Login Successful')
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      handleError(error)
     },
   })
 

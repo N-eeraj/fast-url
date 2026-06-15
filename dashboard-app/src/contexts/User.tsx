@@ -1,7 +1,7 @@
 import { createContext, type PropsWithChildren } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
-import api from '@/utils/api'
+import api from '@utils/api'
 
 export const UserContext = createContext({})
 

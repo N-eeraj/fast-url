@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import api from '@/utils/api'
+import api from '@utils/api'
+import { handleSuccess, handleError } from '@utils/toast'
 
 const registerSchema = z
   .object({
@@ -39,15 +40,17 @@ function useRegister() {
   })
 
   const mutation = useMutation({
-    mutationFn: async (data: RegisterFormValues) => {
+    mutationFn: async (payload: RegisterFormValues) => {
       return await api('/auth/register', {
         method: 'POST',
-        body: data,
+        body: payload,
       })
     },
     onSuccess: () => {
+      handleSuccess('Registration Successful')
     },
-    onError: () => {
+    onError: (error: unknown) => {
+      handleError(error)
     },
   })
 

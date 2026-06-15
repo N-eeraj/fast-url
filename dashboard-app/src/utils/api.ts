@@ -41,7 +41,7 @@ async function api<T = unknown>(
   if (!response.ok) {
     throw {
       status: response.status,
-      data,
+      ...data,
     }
   }
 

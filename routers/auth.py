@@ -2,14 +2,19 @@ from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
 
 router = APIRouter(
-  prefix="/auth",
-  tags=["auth"],
+    prefix="/auth",
+    tags=["auth"],
 )
 
 @router.post("/register")
 async def register():
-  return {}
+    return {
+        "success": True,
+    }
+
 
 @router.post("/login")
 async def login():
-  return {}
+    return {
+        "success": True,
+    }

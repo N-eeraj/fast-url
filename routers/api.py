@@ -1,20 +1,24 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from routers import auth
 
 router = APIRouter(
-  prefix="/api",
-  tags=["api"],
+    prefix="/api",
+    tags=["api"],
 )
 
 router.include_router(auth.router)
 
-@router.get("{path:path}", response_class=JSONResponse)
-async def api_not_found_error():
-  return JSONResponse(
-    status_code=status.HTTP_404_NOT_FOUND,
-    content={
-      "success": False,
-      "message": "URL not found",
-    }
-  )
+@router.api_route(
+    "{path:path}",
+    methods=["GET", "POST", "PATCH", "PUT", "DELETE"],
+    response_class=JSONResponse,
+)
+async def api_not_found_error(request: Request):
+    raise HTTPException(
+        status_code=404,
+        detail={
+            "message": "URL not found",
+            "path": request.url.path,
+        },
+    )

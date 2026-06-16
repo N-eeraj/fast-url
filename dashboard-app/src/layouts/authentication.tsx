@@ -3,13 +3,11 @@ import { Outlet, useLocation } from 'react-router'
 const TEXT_CONTENT = {
   '/app/login': {
     heading: 'Welcome Back',
-    content:
-      'Sign in to manage your links, track performance, and access your dashboard.',
+    content: 'Sign in to manage your links, track performance, and access your dashboard.',
   },
   '/app/register': {
     heading: 'Start Shortening Smarter',
-    content:
-      'Get access to custom short links, detailed insights, and easy link management.',
+    content: 'Get access to custom short links, detailed insights, and easy link management.',
   } as const
 }
 
@@ -34,7 +32,7 @@ function AuthenticationLayout() {
           <img
             src="/static/images/logo.svg"
             alt="logo"
-            className="w-8" />
+            className="w-12" />
           <span className="text-primary">
             URL
           </span>
@@ -50,7 +48,7 @@ function AuthenticationLayout() {
         </div>
       </section>
 
-      <section className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-y-6 lg:bg-primary px-6">
+      <section className="w-full lg:w-1/2 flex flex-col items-center justify-center gap-y-6 px-6 lg:bg-muted">
         <a
           href="/"
           className="flex lg:hidden items-center text-2xl font-extrabold tracking-tight">
@@ -65,7 +63,7 @@ function AuthenticationLayout() {
             URL
           </span>
         </a>
-        <div className="w-full max-w-md bg-card px-4 py-6 rounded">
+        <div className="w-full max-w-md sm:bg-card px-6 py-8 rounded">
           <Outlet />
         </div>
       </section>

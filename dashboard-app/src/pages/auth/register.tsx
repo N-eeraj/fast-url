@@ -1,5 +1,6 @@
-import { Link } from "react-router"
-import RegistrationForm from "@components/auth/RegistrationForm"
+import { Link } from 'react-router'
+import RegistrationForm from '@components/auth/RegistrationForm'
+import clsx from 'clsx'
 
 function Register() {
   return (
@@ -11,7 +12,14 @@ function Register() {
         <RegistrationForm />
       </div>
 
-      <hr />
+      <div
+        className={clsx(
+          "relative w-full text-center text-muted-foreground",
+          "before:absolute before:top-1/2 before:left-0 before:w-[45%] before:h-px before:bg-muted",
+          "after:absolute after:top-1/2 after:right-0 after:w-[45%] after:h-px after:bg-muted",
+        )}>
+        Or
+      </div>
 
       <div className="flex justify-center items-center gap-x-2">
         <span className="text-muted-foreground">

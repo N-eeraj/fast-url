@@ -30,6 +30,7 @@ function LoginForm() {
 
       <Button
         type="submit"
+        variant="secondary"
         loading={isSubmitting}
         className="w-full">
         Login

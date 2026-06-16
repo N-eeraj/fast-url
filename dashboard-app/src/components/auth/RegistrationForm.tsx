@@ -1,6 +1,6 @@
 import Input from '@components/base/Input'
 import Button from '@components/base/Button'
-import useRegister from "@hooks/auth/useRegister"
+import useRegister from '@hooks/auth/useRegister'
 
 function RegistrationForm() {
   const {

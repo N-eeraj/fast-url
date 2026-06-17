@@ -2,13 +2,14 @@ const API_URL = import.meta.env.VITE_API_URL
 
 type ApiOptions = Omit<RequestInit, 'body'> & {
   body?: Record<string, unknown> | string | null
+  query?: string | Record<string, string> | string[][] | URLSearchParams
 }
 
 async function api<T = unknown>(
   endpoint: string,
   options: ApiOptions = {}
 ): Promise<T> {
-  const { body, headers, ...rest } = options
+  const { body, query, headers, ...rest } = options
 
   const isObjectBody =
     body !== null &&
@@ -22,7 +23,13 @@ async function api<T = unknown>(
       ? JSON.stringify(body)
       : body
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const baseUrl = `${API_URL}${endpoint}`
+  const url = new URL(baseUrl)
+  if (query) {
+    url.search = new URLSearchParams(query).toString()
+  }
+
+  const response = await fetch(url, {
     ...rest,
     headers: {
       'Content-Type': 'application/json',

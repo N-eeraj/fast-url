@@ -1,11 +1,24 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import api
 from datetime import datetime, timezone
+from routers import api
+from database import create_db_and_tables
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Starting Up Server")
+    create_db_and_tables()
+
+    yield
+
+    print("Shutting Down Server")
+
+app = FastAPI(
+    lifespan=lifespan
+)
 
 templates = Jinja2Templates(directory="templates")
 dashboard_app_template = Jinja2Templates(directory="dashboard-app/dist")

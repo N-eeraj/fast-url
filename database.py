@@ -1,4 +1,5 @@
 from sqlmodel import Session, SQLModel, create_engine
+from models.users import Users
 from config import Settings
 
 settings = Settings()

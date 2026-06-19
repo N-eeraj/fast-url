@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
-from routers import auth
+from routers.api import auth
 
 router = APIRouter(
     prefix="/api",

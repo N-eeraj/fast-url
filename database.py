@@ -1,6 +1,5 @@
 from sqlmodel import Session, SQLModel, create_engine
-from models.users import Users
-from models.auth_tokens import AuthTokens
+import models
 from config import Settings
 
 settings = Settings()

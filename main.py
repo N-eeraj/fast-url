@@ -1,62 +1,32 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request, status
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from datetime import datetime, timezone
-from routers import api
+from routers import pages, api, redirect
 from database import create_db_and_tables
+from core.logger import logger, setup_logging
 from core.exception_handlers import custom_validation_exception_handler, custom_http_exception_handler
+
+setup_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Starting Up Server")
+    logger.info("Starting Up Server")
     create_db_and_tables()
 
     yield
 
-    print("Shutting Down Server")
+    logger.info("Shutting Down Server")
 
 app = FastAPI(
-    lifespan=lifespan
+    title="Fast URL Server",
+    version="1.0.0",
+    description="URL shortener service",
+    lifespan=lifespan,
 )
 
-templates = Jinja2Templates(directory="templates")
-dashboard_app_template = Jinja2Templates(directory="dashboard-app/dist")
-
-@app.get("/health")
-async def health():
-    return {
-        "success": True,
-        "message": "Fast URL Server is running",
-        "data": {
-            "status": "ok",
-            "timestamp": datetime.now(timezone.utc),
-        },
-    }
-
-
-@app.get("/", response_class=HTMLResponse)
-def landing_page(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-    )
-
-
-app.include_router(api.router)
-
-
-@app.get("/app/{path:path}", response_class=HTMLResponse)
-@app.get("/app", response_class=HTMLResponse)
-def dashboard_app(request: Request):
-    return dashboard_app_template.TemplateResponse(
-        request=request,
-        name="index.html",
-    )
-
-
+# statics
 app.mount(
     "/static",
     StaticFiles(directory="static"),
@@ -68,13 +38,23 @@ app.mount(
     name="dashboard-app-static",
 )
 
-@app.get("/{path:path}", response_class=HTMLResponse)
-def redirect_route(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        status_code=status.HTTP_404_NOT_FOUND,
-        name="not-found.html",
-    )
+# health check route
+@app.get("/health")
+async def health():
+    return {
+        "success": True,
+        "message": "Fast URL Server is running",
+        "data": {
+            "status": "ok",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        },
+    }
 
+# routers
+app.include_router(pages.router)
+app.include_router(api.router)
+app.include_router(redirect.router)
+
+# custom exception handlers
 app.add_exception_handler(RequestValidationError, custom_validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)

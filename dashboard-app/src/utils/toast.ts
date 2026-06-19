@@ -8,17 +8,23 @@ export function handleError(
   error: Error | unknown,
   fallback: string = 'Oops! Something went wrong'
 ) {
-  let message = fallback
   if (
     error &&
-    typeof error === 'object' &&
-    'error' in error &&
-    error.error &&
-    typeof error.error === 'object' &&
-    'message' in error.error &&
-    typeof error.error.message === 'string'
+    typeof error === 'object'
   ) {
-    message = error.error.message
+    if (
+      'errors' in error &&
+      error.errors &&
+      typeof error.errors === 'object'
+    ) {
+      return error.errors
+    }
+    if (
+      'message' in error &&
+      error.message &&
+      typeof error.message === 'string'
+    ) {
+      toast.error(error.message || fallback)
+    }
   }
-  toast.error(message)
 }

@@ -33,6 +33,7 @@ function useRegister() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   })
@@ -48,7 +49,15 @@ function useRegister() {
       handleSuccess('Registration Successful')
     },
     onError: (error: unknown) => {
-      handleError(error)
+      const errors = handleError(error)
+      if (errors) {
+        Object.keys(errors)
+          .forEach((field) => {
+            setError(field as keyof RegisterFormValues, {
+              message: errors[field as keyof typeof errors],
+            })
+          })
+      }
     },
   })
 

@@ -1,12 +1,13 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from datetime import datetime, timezone
 from routers import api
 from database import create_db_and_tables
+from core.exception_handlers import custom_validation_exception_handler, custom_http_exception_handler
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -75,35 +76,5 @@ def redirect_route(request: Request):
         name="not-found.html",
     )
 
-@app.exception_handler(RequestValidationError)
-async def custom_validation_exception_handler(
-    request: Request,
-    exception: RequestValidationError,
-):
-    errors = dict()
-    for error in exception.errors():
-        location = ".".join(error["loc"][1:])
-        errors[location] = list([error["msg"]])
-
-    return JSONResponse(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        content= {
-            "errors": errors,
-            "message": "Bad Request"
-        },
-    )
-
-@app.exception_handler(HTTPException)
-async def custom_http_exception_handler(
-    request: Request,
-    exception: HTTPException,
-):
-    message = exception.detail.pop("message") or "Oops! Something Went Wrong"
-
-    return JSONResponse(
-        status_code=exception.status_code,
-        content={
-            "errors": exception.detail or None,
-            "message": message,
-        },
-    )
+app.add_exception_handler(RequestValidationError, custom_validation_exception_handler)
+app.add_exception_handler(HTTPException, custom_http_exception_handler)

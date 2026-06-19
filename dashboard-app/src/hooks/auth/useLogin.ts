@@ -18,6 +18,7 @@ function useLogin() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   })
@@ -33,7 +34,15 @@ function useLogin() {
       handleSuccess('Login Successful')
     },
     onError: (error: unknown) => {
-      handleError(error)
+      const errors = handleError(error)
+      if (errors) {
+        Object.keys(errors)
+          .forEach((field) => {
+            setError(field as keyof LoginFormValues, {
+              message: errors[field as keyof typeof errors],
+            })
+          })
+      }
     },
   })
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 import re
 
 # validation functions
@@ -32,9 +32,27 @@ def validate_password(password: str):
 
 # schemas
 class RegisterModel(BaseModel):
-    name: str
-    email: EmailStr
-    password: str
+    name: str = Field(
+        ...,
+        description="Full name of the user. Must contain at least 2 characters.",
+        examples=["John Doe"],
+    )
+
+    email: EmailStr = Field(
+        ...,
+        description="Valid email address used for account registration.",
+        examples=["john.doe@example.com"],
+    )
+
+    password: str = Field(
+        ...,
+        description=(
+            "Account password. Must be at least 8 characters long and contain "
+            "at least one uppercase letter, one lowercase letter, one number, "
+            "and one special character."
+        ),
+        examples=["SecurePass123!"],
+    )
 
     @field_validator("name")
     @classmethod
@@ -47,8 +65,17 @@ class RegisterModel(BaseModel):
         return validate_new_password(password)
 
 class LoginModel(BaseModel):
-    email: EmailStr
-    password: str
+    email: EmailStr = Field(
+        ...,
+        description="Registered email address of the user.",
+        examples=["john.doe@example.com"],
+    )
+
+    password: str = Field(
+        ...,
+        description="User account password.",
+        examples=["SecurePass123!"],
+    )
 
     @field_validator("email")
     @classmethod
@@ -59,3 +86,22 @@ class LoginModel(BaseModel):
     @classmethod
     def validate_password_field(cls, password: str):
         return validate_password(password)
+
+class UserResponseModel(BaseModel):
+    id: int = Field(
+        ...,
+        description="User id",
+        examples=[1]
+    )
+
+    name: str = Field(
+        ...,
+        description="Full name of the user. Must contain at least 2 characters.",
+        examples=["John Doe"],
+    )
+
+    email: EmailStr = Field(
+        ...,
+        description="Valid email address used for account registration.",
+        examples=["john.doe@example.com"],
+    )

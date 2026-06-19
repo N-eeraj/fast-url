@@ -1,0 +1,72 @@
+from fastapi import HTTPException
+from schemas.auth import RegisterModel, LoginModel
+from sqlmodel import Session
+import secrets
+import bcrypt
+import hmac
+import hashlib
+from repositories.user import UserRepository
+from repositories.auth_token import AuthTokenRepository
+from config import Settings
+
+settings = Settings()
+
+class AuthService:
+    @staticmethod
+    async def generate_auth_token(
+        session: Session,
+        user_id: int,
+    ) -> str:
+        token: str = secrets.token_hex(32)
+        hashed_token: str = hmac.new(
+            settings.TOKEN_SECRET.encode("utf-8"),
+            token.encode("utf-8"),
+            hashlib.sha256
+        ).hexdigest()
+
+        await AuthTokenRepository.create_auth_token(
+            session=session,
+            hashed_token=hashed_token,
+            user_id=user_id,
+        )
+        return token
+
+    @staticmethod
+    async def register(
+        session: Session,
+        data: RegisterModel,
+    ):
+        has_existing_user = await UserRepository.user_exists_by_email(session, data.email)
+        if has_existing_user:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "message": "User already exists, login to continue",
+                },
+            )
+
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(data.password.encode("utf-8"), salt)
+
+        new_user = await UserRepository.create_user(
+            session=session,
+            email=data.email,
+            name=data.name,
+            hashed_password=hashed_password,
+        )
+
+        auth_token = await AuthService.generate_auth_token(session, new_user["id"])
+
+        return {
+            **new_user,
+            "auth_token": auth_token,
+        }
+
+    async def login(
+        session: Session,
+        data: LoginModel,
+    ):
+        print(data.email)
+        print(data.password)
+
+        return

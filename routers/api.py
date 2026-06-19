@@ -10,7 +10,7 @@ router = APIRouter(
 router.include_router(auth.router)
 
 @router.api_route(
-    "{path:path}",
+    "/{path:path}",
     methods=["GET", "POST", "PATCH", "PUT", "DELETE"],
     response_class=JSONResponse,
 )

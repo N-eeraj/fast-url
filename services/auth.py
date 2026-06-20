@@ -66,8 +66,32 @@ class AuthService:
     async def login(
         session: Session,
         data: LoginModel,
-    ):
-        print(data.email)
-        print(data.password)
+    ) -> tuple[UserResponseModel, str]:
+        user_by_email = await UserRepository.get_user_by_email(session, data.email)
+        if not user_by_email:
+            raise HTTPException(
+                status_code=401,
+                detail={
+                    "message": "Invalid Credentials",
+                }
+            )
 
-        return
+        is_matching_password = bcrypt.checkpw(
+            data.password.encode("utf-8"),
+            user_by_email["password"].encode("utf-8"),
+        )
+        if not is_matching_password:
+            raise HTTPException(
+                status_code=401,
+                detail={
+                    "message": "Invalid Credentials",
+                }
+            )
+
+        auth_token = await AuthService.generate_auth_token(session, user_by_email["id"])
+        user = UserResponseModel.model_validate(user_by_email)
+
+        return (
+            user,
+            auth_token,
+        )

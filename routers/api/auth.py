@@ -34,10 +34,18 @@ async def register(
 
 @router.post("/login")
 async def login(
+    response: Response,
     body: LoginModel,
     session: Session=Depends(get_session),
 ):
-    data = await AuthService.login(session, body)
+    (data, auth_token) = await AuthService.login(session, body)
+
+    response.set_cookie(
+        key="auth_token",
+        value=auth_token,
+        httponly=True,
+        max_age=AUTH_TOKEN_AGE,
+    )
 
     return {
         "success": True,

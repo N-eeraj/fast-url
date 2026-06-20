@@ -152,3 +152,9 @@ class UserResponseModel(BaseModel):
         description="Valid email address used for account registration.",
         examples=["john.doe@example.com"],
     )
+
+class UserWithPassword(UserResponseModel):
+    password: str = Field(
+        ...,
+        description="User's hashed password for internal use",
+    )

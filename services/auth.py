@@ -7,6 +7,7 @@ import hmac
 import hashlib
 from repositories.user import UserRepository
 from repositories.auth_token import AuthTokenRepository
+from schemas.auth import UserResponseModel
 from config import Settings
 
 settings = Settings()
@@ -35,7 +36,7 @@ class AuthService:
     async def register(
         session: Session,
         data: RegisterModel,
-    ):
+    ) -> tuple[UserResponseModel, str]:
         has_existing_user = await UserRepository.user_exists_by_email(session, data.email)
         if has_existing_user:
             raise HTTPException(
@@ -57,10 +58,10 @@ class AuthService:
 
         auth_token = await AuthService.generate_auth_token(session, new_user["id"])
 
-        return {
-            **new_user,
-            "auth_token": auth_token,
-        }
+        return (
+            new_user,
+            auth_token,
+        )
 
     async def login(
         session: Session,

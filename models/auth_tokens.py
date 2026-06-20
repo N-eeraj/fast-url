@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field
 from datetime import datetime
-from sqlalchemy import Column, ForeignKey, DateTime, func
+from sqlalchemy import Column, ForeignKey, DateTime, func, text
 
 class AuthTokens(SQLModel, table=True):
     __tablename__: str = "auth_tokens"
@@ -35,5 +35,12 @@ class AuthTokens(SQLModel, table=True):
             DateTime(timezone=True),
             server_default=func.now(),
             onupdate=func.now(),
+        ),
+    )
+
+    expires_at: datetime = Field(
+        sa_column=Column(
+            DateTime(timezone=True),
+            server_default=text("DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 24 HOUR)")
         ),
     )

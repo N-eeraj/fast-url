@@ -1,6 +1,8 @@
 from sqlmodel import Session, select
+from sqlalchemy import func
 from models.users import Users
-from schemas.auth import UserResponseModel, UserWithPassword
+from models.auth_tokens import AuthTokens
+from schemas.auth import UserResponseModel, UserWithPasswordModel
 
 class UserRepository:
     @staticmethod
@@ -36,7 +38,7 @@ class UserRepository:
     async def get_user_by_email(
         session: Session,
         email: str
-    ) -> UserWithPassword | None:
+    ) -> UserWithPasswordModel | None:
         user_by_email_statement = select(
             Users.id,
             Users.name,
@@ -44,6 +46,28 @@ class UserRepository:
             Users.password,
         ).where(Users.email == email)
         user_by_email = session.exec(user_by_email_statement).first()
+
         if not user_by_email: return None
-        user = UserWithPassword.model_validate(user_by_email._mapping)
+        user = UserWithPasswordModel.model_validate(user_by_email._mapping)
+        return user.model_dump()
+
+    @staticmethod
+    async def get_user_by_token(
+        session: Session,
+        hashed_token: str,
+    ) -> UserResponseModel | None:
+        user_by_token_statement = select(
+            Users.id,
+            Users.name,
+            Users.email,
+        ).join(
+            AuthTokens,
+            AuthTokens.user_id == Users.id,
+        ).where(
+            (AuthTokens.token == hashed_token) & (AuthTokens.expires_at > func.now())
+        )
+        user_by_token = session.exec(user_by_token_statement).first()
+
+        if not user_by_token: return None
+        user = UserResponseModel.model_validate(user_by_token._mapping)
         return user.model_dump()

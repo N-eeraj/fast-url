@@ -3,6 +3,8 @@ from schemas.auth import RegisterModel, LoginModel
 from sqlmodel import Session
 from services.auth import AuthService
 from database import get_session
+from middlewares.authentication import auth_middleware
+from schemas.auth import CurrentUserModel
 
 router = APIRouter(
     prefix="/auth",
@@ -29,8 +31,8 @@ async def register(
     return {
         "success": True,
         "data": data,
+        "message": "Registered Successfully",
     }
-
 
 @router.post("/login")
 async def login(
@@ -50,4 +52,20 @@ async def login(
     return {
         "success": True,
         "data": data,
+        "message": "Logged In Successfully",
+    }
+
+@router.post("/logout")
+async def logout(
+    response: Response,
+    session: Session=Depends(get_session),
+    current_user: CurrentUserModel=Depends(auth_middleware),
+):
+    await AuthService.logout(session, current_user["hashed_token"])
+
+    response.delete_cookie(key="auth_token")
+
+    return {
+        "success": True,
+        "message": "Logged Out Successfully",
     }

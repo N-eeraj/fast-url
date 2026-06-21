@@ -63,6 +63,7 @@ class AuthService:
             auth_token,
         )
 
+    @staticmethod
     async def login(
         session: Session,
         data: LoginModel,
@@ -95,3 +96,10 @@ class AuthService:
             user,
             auth_token,
         )
+
+    @staticmethod
+    async def logout(
+        session: Session,
+        hashed_token: str
+    ) -> None:
+        await AuthTokenRepository.delete_auth_token(session, hashed_token)

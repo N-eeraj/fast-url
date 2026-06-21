@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import Button from '@components/base/Button'
 import ThemeToggle from '@components/app-bar/ThemeToggle'
+import Logout from '@components/app-bar/Logout'
 
 function AppBar() {
   return (
@@ -31,11 +32,7 @@ function AppBar() {
               Profile
             </Button>
           </Link>
-          <Button
-            variant="destructive"
-            className="rounded-md text-sm">
-            Logout
-          </Button>
+          <Logout />
         </div>
       </div>
     </nav>

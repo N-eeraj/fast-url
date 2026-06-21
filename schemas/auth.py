@@ -153,8 +153,19 @@ class UserResponseModel(BaseModel):
         examples=["john.doe@example.com"],
     )
 
-class UserWithPassword(UserResponseModel):
+class UserWithPasswordModel(UserResponseModel):
     password: str = Field(
         ...,
         description="User's hashed password for internal use",
+    )
+
+class CurrentUserModel(BaseModel):
+    auth_token: str = Field(
+        ...,
+        description="User authentication token stored in cookies",
+    )
+
+    hashed_token: str = Field(
+        ...,
+        description="Hashed authentication token stored in database",
     )

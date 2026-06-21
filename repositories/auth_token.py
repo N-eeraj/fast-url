@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 from models.auth_tokens import AuthTokens
 
 class AuthTokenRepository:
@@ -16,3 +16,14 @@ class AuthTokenRepository:
         session.commit()
 
         return auth_token
+
+    @staticmethod
+    async def delete_auth_token(
+        session: Session,
+        hashed_token: str,
+    ) -> None:
+        auth_token_statement = select(AuthTokens).where(AuthTokens.token == hashed_token)
+        auth_token = session.exec(auth_token_statement).first()
+        if auth_token:
+            session.delete(auth_token)
+            session.commit()

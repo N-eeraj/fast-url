@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { useNavigate } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import api from '@utils/api'
+import useApi from '@hooks/useApi'
 import { handleSuccess, handleError } from '@utils/toast'
 
 const loginSchema = z.object({
@@ -24,6 +24,7 @@ function useLogin() {
     resolver: zodResolver(loginSchema),
   })
 
+  const api = useApi()
   const navigate = useNavigate()
 
   const mutation = useMutation({

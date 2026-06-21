@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { useNavigate } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import api from '@utils/api'
+import useApi from '@hooks/useApi'
 import { handleSuccess, handleError } from '@utils/toast'
 
 const registerSchema = z
@@ -39,6 +39,7 @@ function useRegister() {
     resolver: zodResolver(registerSchema),
   })
 
+  const api = useApi()
   const navigate = useNavigate()
 
   const mutation = useMutation({

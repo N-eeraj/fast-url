@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router'
 import { useMutation } from '@tanstack/react-query'
-import api from '@utils/api'
+import useApi from '@hooks/useApi'
 import { handleSuccess, handleError } from '@utils/toast'
 
 function useLogout() {
+  const api = useApi()
   const navigate = useNavigate()
 
   const mutation = useMutation({

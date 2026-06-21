@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useNavigate } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import api from '@utils/api'
@@ -23,6 +24,8 @@ function useLogin() {
     resolver: zodResolver(loginSchema),
   })
 
+  const navigate = useNavigate()
+
   const mutation = useMutation({
     mutationFn: async (payload: LoginFormValues) => {
       return await api('/auth/login', {
@@ -32,6 +35,9 @@ function useLogin() {
     },
     onSuccess: () => {
       handleSuccess('Login Successful')
+      navigate({
+        pathname: '/app',
+      })
     },
     onError: (error: unknown) => {
       const errors = handleError(error)

@@ -6,9 +6,13 @@ router = APIRouter()
 
 @router.get("/", response_class=HTMLResponse)
 def landing_page(request: Request):
+    is_authenticated = bool(request.cookies)
     return templates.TemplateResponse(
         request=request,
         name="index.html",
+        context={
+            "is_authenticated": is_authenticated,
+        }
     )
 
 @router.get("/app", response_class=HTMLResponse)

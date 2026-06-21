@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useNavigate } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import api from '@utils/api'
@@ -38,6 +39,8 @@ function useRegister() {
     resolver: zodResolver(registerSchema),
   })
 
+  const navigate = useNavigate()
+
   const mutation = useMutation({
     mutationFn: async ({ confirmPassword, ...payload }: RegisterFormValues) => {
       return await api('/auth/register', {
@@ -47,6 +50,9 @@ function useRegister() {
     },
     onSuccess: () => {
       handleSuccess('Registration Successful')
+      navigate({
+        pathname: '/app',
+      })
     },
     onError: (error: unknown) => {
       const errors = handleError(error)

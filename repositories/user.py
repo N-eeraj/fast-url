@@ -44,5 +44,6 @@ class UserRepository:
             Users.password,
         ).where(Users.email == email)
         user_by_email = session.exec(user_by_email_statement).first()
+        if not user_by_email: return None
         user = UserWithPassword.model_validate(user_by_email._mapping)
         return user.model_dump()

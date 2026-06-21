@@ -24,18 +24,26 @@
           URL
         </span>
       </div>
-      <div class="auth">
-        <a href="/app/register">
-          <button class="btn btn-primary">
-            Sign Up
-          </button>
-        </a>
-        <a href="/app/login">
+      {% if is_authenticated %}
+        <a href="/app">
           <button class="btn btn-secondary">
-            Login
+            Dashboard
           </button>
         </a>
-      </div>
+      {% else %}
+        <div class="auth">
+          <a href="/app/register">
+            <button class="btn btn-primary">
+              Sign Up
+            </button>
+          </a>
+          <a href="/app/login">
+            <button class="btn btn-secondary">
+              Login
+            </button>
+          </a>
+        </div>
+      {% endif %}
     </nav>
 
     <!-- HERO -->

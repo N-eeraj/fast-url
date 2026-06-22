@@ -3,6 +3,7 @@ import useLogout from '@hooks/auth/useLogout'
 
 function Logout() {
   const {
+    disabled,
     loading,
     logout,
   } = useLogout()
@@ -11,6 +12,7 @@ function Logout() {
     <Button
       variant="destructive"
       loading={loading}
+      disabled={disabled}
       className="rounded-md text-sm"
       onClick={logout}>
       Logout

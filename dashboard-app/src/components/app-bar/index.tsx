@@ -1,9 +1,17 @@
+import { use } from 'react'
 import { Link } from 'react-router'
 import Button from '@components/base/Button'
 import ThemeToggle from '@components/app-bar/ThemeToggle'
 import Logout from '@components/app-bar/Logout'
+import { UserContext } from '@contexts/User'
+import clsx from 'clsx'
 
 function AppBar() {
+  const {
+    user,
+    loadingUser,
+  } = use(UserContext)
+
   return (
     <nav className="sticky top-0 w-full border-b border-border bg-background text-foreground">
       <div className="w-full max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -24,14 +32,22 @@ function AppBar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link to="/app/profile">
+
+          {/* profile link */}
+          <Link
+            to="/app/profile"
+            className={clsx(
+              loadingUser && "pointer-events-none",
+            )}>
             <Button
               variant="ghost"
               size="lg"
+              disabled={loadingUser}
               className="rounded-md text-sm">
-              Profile
+              {user?.name ?? "Profile"}
             </Button>
           </Link>
+
           <Logout />
         </div>
       </div>

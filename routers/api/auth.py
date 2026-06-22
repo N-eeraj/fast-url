@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Response, status, Depends
+from fastapi import APIRouter, Request, Response, status, Depends
 from schemas.auth import RegisterModel, LoginModel
 from sqlmodel import Session
 from services.auth import AuthService
 from database import get_session
-from middlewares.authentication import auth_middleware
+from dependencies.require_user import require_user
 from schemas.auth import CurrentUserModel
 
 router = APIRouter(
@@ -55,13 +55,14 @@ async def login(
         "message": "Logged In Successfully",
     }
 
-@router.post("/logout")
+@router.post("/logout", dependencies=[Depends(require_user)])
 async def logout(
+    request: Request,
     response: Response,
     session: Session=Depends(get_session),
-    current_user: CurrentUserModel=Depends(auth_middleware),
 ):
-    await AuthService.logout(session, current_user["hashed_token"])
+    hashed_token = request.state.user["hashed_token"]
+    await AuthService.logout(session, hashed_token)
 
     response.delete_cookie(key="auth_token")
 

@@ -10,7 +10,7 @@ from config import Settings
 
 settings = Settings()
 
-async def auth_middleware(
+async def require_user(
     request: Request,
     session: Session=Depends(get_session),
 ) -> CurrentUserModel:
@@ -38,8 +38,11 @@ async def auth_middleware(
             }
         )
 
-    return {
+    current_user = CurrentUserModel.model_validate({
         **user,
-        "auth_token": auth_token,
         "hashed_token": hashed_token,
-    }
+    }).model_dump()
+
+    request.state.user = current_user
+
+    return current_user

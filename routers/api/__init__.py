@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
-from routers.api import auth
+from routers.api import auth, profile
 
 router = APIRouter(
     prefix="/api",
@@ -8,6 +8,7 @@ router = APIRouter(
 )
 
 router.include_router(auth.router)
+router.include_router(profile.router)
 
 @router.api_route(
     "/{path:path}",

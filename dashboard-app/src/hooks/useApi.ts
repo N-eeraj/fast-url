@@ -40,7 +40,7 @@ function useApi() {
         'Content-Type': 'application/json',
         ...headers,
       },
-      body: finalBody,
+      body: finalBody as BodyInit,
     })
 
     const contentType = response.headers.get('content-type')

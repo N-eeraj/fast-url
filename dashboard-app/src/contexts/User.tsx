@@ -1,12 +1,11 @@
 import { createContext, type PropsWithChildren } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
-import api from '@utils/api'
+import useApi from '@hooks/useApi'
 
 export const UserContext = createContext({})
 
 function UserContextProvider({ children }: PropsWithChildren) {
-  const navigate = useNavigate()
+  const api = useApi()
 
   const {
     data,
@@ -14,11 +13,7 @@ function UserContextProvider({ children }: PropsWithChildren) {
   } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      try {
-        await api('/profile')
-      } catch (error) {
-        navigate('/app/login')
-      }
+      await api('/profile')
     },
   })
 

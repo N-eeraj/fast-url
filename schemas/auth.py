@@ -159,12 +159,7 @@ class UserWithPasswordModel(UserResponseModel):
         description="User's hashed password for internal use",
     )
 
-class CurrentUserModel(BaseModel):
-    auth_token: str = Field(
-        ...,
-        description="User authentication token stored in cookies",
-    )
-
+class CurrentUserModel(UserResponseModel):
     hashed_token: str = Field(
         ...,
         description="Hashed authentication token stored in database",

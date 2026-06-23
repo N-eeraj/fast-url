@@ -11,7 +11,9 @@ function LoginForm() {
   } = useLogin()
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form
+      className="space-y-4"
+      onSubmit={onSubmit}>
       <Input
         label="Email"
         type="email"

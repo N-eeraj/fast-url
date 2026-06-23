@@ -51,7 +51,7 @@ function useApi() {
         : await response.text().catch(() => null)
 
     if (!response.ok) {
-      if (response.status === 401 && endpoint !== "/auth/login") {
+      if (response.status === 401 && endpoint !== '/auth/login') {
         navigate('/app/login')
       }
 

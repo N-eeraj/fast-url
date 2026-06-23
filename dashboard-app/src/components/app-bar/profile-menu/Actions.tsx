@@ -1,7 +1,7 @@
 import Button from '@components/base/Button'
-import Logout from '@components/app-bar/Logout'
+import Logout from '@/components/app-bar/profile-menu/Logout'
 import { DropdownMenuItem } from '@components/ui/dropdown-menu'
-import { Edit2Icon, KeyRoundIcon } from 'lucide-react'
+import { UserPenIcon, KeyRoundIcon } from 'lucide-react'
 import type { MouseEventHandler } from 'react'
 
 interface Props {
@@ -17,7 +17,7 @@ function ProfileMenuActions({ onEditProfile, onChangePassword }: Props) {
           variant="ghost"
           className="w-full justify-start px-2"
           onClick={onEditProfile}>
-          <Edit2Icon className="size-3" />
+          <UserPenIcon className="size-3" />
           Edit Profile
         </Button>
       </DropdownMenuItem>

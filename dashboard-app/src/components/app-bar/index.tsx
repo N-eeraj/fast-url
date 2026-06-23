@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import ThemeToggle from '@components/app-bar/ThemeToggle'
-import ProfileMenu from '@components/app-bar/ProfileMenu'
+import ProfileMenu from '@/components/app-bar/profile-menu'
 
 function AppBar() {
   return (

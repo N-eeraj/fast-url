@@ -1,69 +1,82 @@
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useNavigate } from 'react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+
 import useApi from '@hooks/useApi'
 import { handleSuccess, handleError } from '@utils/toast'
 
-const registerSchema = z
+const changePasswordSchema = z
   .object({
-    name: z.string()
-      .min(2, 'Please enter your name'),
-    email: z.email('Please enter a valid email address'),
-    password: z.string()
+    currentPassword: z.string()
+      .min(1, 'Please enter your current password'),
+    newPassword: z.string()
       .min(8, 'Password must be at least 8 characters')
       .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
       .regex(/[a-z]/, 'Must contain at least one lowercase letter')
       .regex(/[0-9]/, 'Must contain at least one number')
       .regex(/[!@#$%^&*(),.?':{}|<>]/, 'Must contain at least one special character'),
-    confirmPassword: z.string(),
+    confirmPassword: z.string()
+      .min(1, 'Please confirm your new password'),
   })
     .refine(
-      (data) => data.password === data.confirmPassword,
+      (data) => data.newPassword === data.confirmPassword,
       {
         message: 'Passwords do not match',
         path: ['confirmPassword'],
       }
     )
 
-export type RegisterFormValues = z.infer<typeof registerSchema>
+export type ChangePasswordFormValues = z.infer<
+  typeof changePasswordSchema
+>
 
-function useRegister() {
+function useChangePassword() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+    reset,
+  } = useForm<ChangePasswordFormValues>({
+    resolver: zodResolver(changePasswordSchema),
   })
 
   const api = useApi()
-  const navigate = useNavigate()
 
   const mutation = useMutation({
-    mutationFn: async ({ confirmPassword, ...payload }: RegisterFormValues) => {
-      return await api('/auth/register', {
-        method: 'POST',
-        body: payload,
+    mutationFn: async (
+      payload: ChangePasswordFormValues,
+    ) => {
+      return await api('/profile/change-password', {
+        method: 'PATCH',
+        body: {
+          currentPassword: payload.currentPassword,
+          newPassword: payload.newPassword,
+        },
       })
     },
+
     onSuccess: () => {
-      handleSuccess('Registration Successful')
-      navigate({
-        pathname: '/app',
-      })
+      handleSuccess('Password changed successfully')
+      reset()
     },
+
     onError: (error: unknown) => {
       const errors = handleError(error)
+
       if (errors) {
-        Object.keys(errors)
-          .forEach((field) => {
-            setError(field as keyof RegisterFormValues, {
-              message: errors[field as keyof typeof errors],
-            })
-          })
+        Object.keys(errors).forEach((field) => {
+          setError(
+            field as keyof ChangePasswordFormValues,
+            {
+              message:
+                errors[
+                  field as keyof typeof errors
+                ],
+            }
+          )
+        })
       }
     },
   })
@@ -80,4 +93,4 @@ function useRegister() {
   }
 }
 
-export default useRegister
+export default useChangePassword

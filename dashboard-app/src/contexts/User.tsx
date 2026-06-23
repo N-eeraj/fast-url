@@ -2,7 +2,16 @@ import { createContext, type PropsWithChildren } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useApi from '@hooks/useApi'
 
-export const UserContext = createContext({
+interface UserData {
+  id: number
+  name: string
+  email: string
+}
+
+export const UserContext = createContext<{
+  user?: UserData | null
+  loadingUser: boolean
+}>({
   user: null,
   loadingUser: false,
 })
@@ -13,7 +22,7 @@ function UserContextProvider({ children }: PropsWithChildren) {
   const {
     data,
     isLoading,
-  } = useQuery({
+  } = useQuery<UserData | null>({
     queryKey: ['user'],
     queryFn: async () => {
       const response = await api('/profile')
@@ -22,8 +31,9 @@ function UserContextProvider({ children }: PropsWithChildren) {
         typeof response === "object" &&
         "data" in response
       ) {
-        return response.data
+        return response.data as UserData
       }
+      return null
     },
   })
 

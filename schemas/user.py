@@ -71,7 +71,6 @@ def validate_password(password: str):
 
     return password
 
-
 # schemas
 class UserBaseModel(BaseModel):
     name: str = Field(

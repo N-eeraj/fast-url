@@ -5,7 +5,7 @@ from sqlmodel import Session
 from database import get_session
 from services.profile import ProfileService
 from schemas.auth import UserResponseModel
-from schemas.profile import UpdateProfileModel
+from schemas.profile import UpdateProfileModel, UpdatePasswordModel
 
 router = APIRouter(
     prefix="/profile",
@@ -44,4 +44,21 @@ async def update_profile(
     return {
         "success": True,
         "message": "User Details Updated Successfully",
+    }
+
+@router.patch("/change-password", response_class=JSONResponse)
+async def change_password(
+    request: Request,
+    body: UpdatePasswordModel,
+    session: Session=Depends(get_session),
+):
+    await ProfileService.update_password(
+        session,
+        request.state.user["id"],
+        body,
+    )
+
+    return {
+        "success": True,
+        "message": "Password Updated Successfully",
     }

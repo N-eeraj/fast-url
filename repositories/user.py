@@ -36,6 +36,23 @@ class UserRepository:
         return user.model_dump()
 
     @staticmethod
+    async def get_user_by_id(
+        session: Session,
+        id: int
+    ) -> UserWithPasswordModel | None:
+        user_by_id_statement = select(
+            Users.id,
+            Users.name,
+            Users.email,
+            Users.password,
+        ).where(Users.id == id)
+        user_by_id = session.exec(user_by_id_statement).first()
+
+        if not user_by_id: return None
+        user = UserWithPasswordModel.model_validate(user_by_id._mapping)
+        return user.model_dump()
+
+    @staticmethod
     async def get_user_by_email(
         session: Session,
         email: str
@@ -86,4 +103,18 @@ class UserRepository:
             **values
         )
         session.exec(update_profile_statement)
+        session.commit()
+
+    @staticmethod
+    async def update_password(
+        session: Session,
+        user_id: int,
+        hashed_password: str,
+    ):
+        update_password_statement = update(Users).where(
+            Users.id == user_id,
+        ).values(
+            password=hashed_password,
+        )
+        session.exec(update_password_statement)
         session.commit()

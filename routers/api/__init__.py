@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from routers.api import auth, profile
 
@@ -17,7 +17,7 @@ router.include_router(profile.router)
 )
 async def api_not_found_error(request: Request):
     raise HTTPException(
-        status_code=404,
+        status_code=status.HTTP_404_NOT_FOUND,
         detail={
             "message": "URL not found",
             "path": request.url.path,

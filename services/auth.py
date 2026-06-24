@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from schemas.auth import RegisterModel, LoginModel
 from sqlmodel import Session
 import secrets
@@ -40,7 +40,7 @@ class AuthService:
         has_existing_user = await UserRepository.user_exists_by_email(session, data.email)
         if has_existing_user:
             raise HTTPException(
-                status_code=409,
+                status_code=status.HTTP_409_CONFLICT,
                 detail={
                     "message": "User already exists, login to continue",
                 },
@@ -71,7 +71,7 @@ class AuthService:
         user_by_email = await UserRepository.get_user_by_email(session, data.email)
         if not user_by_email:
             raise HTTPException(
-                status_code=401,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 detail={
                     "message": "Invalid Credentials",
                 }
@@ -83,7 +83,7 @@ class AuthService:
         )
         if not is_matching_password:
             raise HTTPException(
-                status_code=401,
+                status_code=status.HTTP_401_UNAUTHORIZED,
                 detail={
                     "message": "Invalid Credentials",
                 }

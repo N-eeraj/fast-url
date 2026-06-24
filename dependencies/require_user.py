@@ -1,4 +1,4 @@
-from fastapi import Request, Depends
+from fastapi import Request, Depends, status
 from fastapi.exceptions import HTTPException
 from repositories.user import UserRepository
 from sqlmodel import Session
@@ -17,7 +17,7 @@ async def require_user(
     auth_token = request.cookies.get("auth_token")
     if not auth_token:
         raise HTTPException(
-            status_code=401,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
                 "message": "Unauthenticated User",
             }
@@ -32,7 +32,7 @@ async def require_user(
 
     if not user:
         raise HTTPException(
-            status_code=401,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
                 "message": "Unauthenticated User",
             }

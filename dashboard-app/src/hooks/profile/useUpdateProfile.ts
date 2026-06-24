@@ -18,7 +18,7 @@ export type UpdateProfileFormValues = z.infer<
   typeof updateProfileSchema
 >
 
-function useUpdateProfile() {
+function useUpdateProfile(open: boolean) {
   const { user } = use(UserContext)
 
   const {
@@ -77,6 +77,15 @@ function useUpdateProfile() {
     setValues(user)
   }, [
     user
+  ])
+
+  useEffect(() => {
+    if (!open) return
+    setValues(user, {
+      shouldValidate: true,
+    })
+  }, [
+    open,
   ])
 
   return {

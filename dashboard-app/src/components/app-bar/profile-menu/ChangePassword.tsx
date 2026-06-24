@@ -1,12 +1,9 @@
 import Dialog from '@components/base/Dialog'
 import Input from '@components/base/Input'
 import Button from '@components/base/Button'
-import useChangePassword from '@hooks/profile/useChangePassword'
+import useChangePassword, { type Args } from '@hooks/profile/useChangePassword'
 
-interface Props {
-  open: boolean
-  onClose: () => void
-}
+interface Props extends Args {}
 
 function ChangePassword({ open, onClose }: Props) {
   const {
@@ -14,7 +11,7 @@ function ChangePassword({ open, onClose }: Props) {
     errors,
     onSubmit,
     isSubmitting,
-  } = useChangePassword()
+  } = useChangePassword({ open, onClose })
 
   return (
     <Dialog
@@ -29,8 +26,8 @@ function ChangePassword({ open, onClose }: Props) {
           label="Current Password"
           type="password"
           placeholder="Enter your current password"
-          error={errors.currentPassword?.message}
-          {...register("currentPassword")}
+          error={errors.password?.message}
+          {...register("password")}
         />
 
         <Input

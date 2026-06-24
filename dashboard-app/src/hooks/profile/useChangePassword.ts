@@ -1,14 +1,14 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-
 import useApi from '@hooks/useApi'
 import { handleSuccess, handleError } from '@utils/toast'
 
 const changePasswordSchema = z
   .object({
-    currentPassword: z.string()
+    password: z.string()
       .min(1, 'Please enter your current password'),
     newPassword: z.string()
       .min(8, 'Password must be at least 8 characters')
@@ -31,7 +31,12 @@ export type ChangePasswordFormValues = z.infer<
   typeof changePasswordSchema
 >
 
-function useChangePassword() {
+export interface Args {
+  open: boolean
+  onClose: () => void
+}
+
+function useChangePassword({ open, onClose }: Args) {
   const {
     register,
     handleSubmit,
@@ -51,8 +56,8 @@ function useChangePassword() {
       return await api('/profile/change-password', {
         method: 'PATCH',
         body: {
-          currentPassword: payload.currentPassword,
-          newPassword: payload.newPassword,
+          password: payload.password,
+          new_password: payload.newPassword,
         },
       })
     },
@@ -60,6 +65,7 @@ function useChangePassword() {
     onSuccess: () => {
       handleSuccess('Password changed successfully')
       reset()
+      onClose()
     },
 
     onError: (error: unknown) => {
@@ -84,6 +90,13 @@ function useChangePassword() {
   const onSubmit = handleSubmit((data) => {
     mutation.mutate(data)
   })
+
+  useEffect(() => {
+    if (!open) return
+    reset()
+  }, [
+    open,
+  ])
 
   return {
     register,

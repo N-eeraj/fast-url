@@ -13,8 +13,8 @@ function EditProfile({ open, onClose }: Props) {
     register,
     errors,
     onSubmit,
-    isSubmitting
-  } = useUpdateProfile()
+    isSubmitting,
+  } = useUpdateProfile(open)
 
   return (
     <Dialog

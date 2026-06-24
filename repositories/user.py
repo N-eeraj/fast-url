@@ -1,8 +1,9 @@
-from sqlmodel import Session, select
+from sqlmodel import Session, select, update
 from sqlalchemy import func
 from models.users import Users
 from models.auth_tokens import AuthTokens
 from schemas.auth import UserResponseModel, UserWithPasswordModel
+from schemas.profile import UpdateProfileModel
 
 class UserRepository:
     @staticmethod
@@ -71,3 +72,18 @@ class UserRepository:
         if not user_by_token: return None
         user = UserResponseModel.model_validate(user_by_token._mapping)
         return user.model_dump()
+
+    @staticmethod
+    async def update_user(
+        session: Session,
+        user_id: int,
+        data: UpdateProfileModel,
+    ):
+        values = data.model_dump(exclude_unset=True)
+        update_profile_statement = update(Users).where(
+            Users.id == user_id,
+        ).values(
+            **values
+        )
+        session.exec(update_profile_statement)
+        session.commit()

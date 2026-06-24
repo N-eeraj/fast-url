@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import useApi from '@hooks/useApi'
 import { UserContext } from '@contexts/User'
+import { queryClient } from '@/QueryProvider'
 import { handleSuccess, handleError } from '@utils/toast'
 
 const updateProfileSchema = z.object({
@@ -36,13 +37,18 @@ function useUpdateProfile() {
     mutationFn: async (
       payload: UpdateProfileFormValues,
     ) => {
-      return await api('/users/profile', {
+      return await api('/profile', {
         method: 'PATCH',
         body: payload,
       })
     },
     onSuccess: () => {
       handleSuccess('Profile updated successfully')
+      queryClient.invalidateQueries(
+        {
+          queryKey: ['user'],
+        }
+      )
     },
     onError: (error: unknown) => {
       const errors = handleError(error)

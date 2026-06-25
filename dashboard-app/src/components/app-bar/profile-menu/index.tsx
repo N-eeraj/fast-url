@@ -1,7 +1,7 @@
 import { use, useState } from 'react'
 import Button from '@components/base/Button'
 import DropDown from '@components/base/DropDown'
-import ProfileMenuActions from '@/components/app-bar/profile-menu/Actions'
+import ProfileMenuActions from '@components/app-bar/profile-menu/Actions'
 import { UserContext } from '@contexts/User'
 import EditProfile from '@components/app-bar/profile-menu/EditProfile'
 import ChangePassword from '@components/app-bar/profile-menu/ChangePassword'

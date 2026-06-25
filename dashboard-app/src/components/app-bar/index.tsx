@@ -1,6 +1,8 @@
+import React, { Suspense } from 'react'
 import { Link } from 'react-router'
 import ThemeToggle from '@components/app-bar/ThemeToggle'
-import ProfileMenu from '@/components/app-bar/profile-menu'
+
+const ProfileMenu = React.lazy(() => import('@components/app-bar/profile-menu'))
 
 function AppBar() {
   return (
@@ -23,7 +25,12 @@ function AppBar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <ProfileMenu />
+          <Suspense
+            fallback={(
+              <div className="w-24 h-8 bg-muted rounded animate-pulse" />
+            )}>
+            <ProfileMenu />
+          </Suspense>
         </div>
       </div>
     </nav>

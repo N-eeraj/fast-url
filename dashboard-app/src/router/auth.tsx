@@ -1,7 +1,9 @@
+import React from 'react'
 import { type RouteObject } from 'react-router'
 import AuthenticationLayout from '@layouts/authentication'
-import Login from '@pages/auth/login'
-import Register from '@pages/auth/register'
+
+const Login = React.lazy(() => import('@pages/auth/login'))
+const Register = React.lazy(() => import('@pages/auth/register'))
 
 const authRoutes = [
   {

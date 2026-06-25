@@ -74,13 +74,14 @@ function useUpdateProfile(open: boolean) {
   })
 
   useEffect(() => {
+    if (!user) return
     setValues(user)
   }, [
     user
   ])
 
   useEffect(() => {
-    if (!open) return
+    if (!(open && user)) return
     setValues(user, {
       shouldValidate: true,
     })

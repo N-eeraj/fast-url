@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router'
 
 const TEXT_CONTENT = {
@@ -64,7 +65,12 @@ function AuthenticationLayout() {
           </span>
         </a>
         <div className="w-full max-w-md sm:bg-card px-6 py-8 rounded">
-          <Outlet />
+          <Suspense 
+            fallback={(
+              <div className="w-full h-80" />
+            )}>
+            <Outlet />
+          </Suspense>
         </div>
       </section>
     </main>

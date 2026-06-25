@@ -1,5 +1,7 @@
-import { Suspense } from 'react'
-import { Outlet, useLocation } from 'react-router'
+import { Suspense, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Outlet, useLocation, useNavigate } from 'react-router'
+import useApi from '@/hooks/useApi'
 
 const TEXT_CONTENT = {
   '/app/login': {
@@ -14,11 +16,30 @@ const TEXT_CONTENT = {
 
 function AuthenticationLayout() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const api = useApi()
 
   const {
     heading,
     content,
   } = TEXT_CONTENT[pathname as keyof typeof TEXT_CONTENT]
+
+  const {
+    status,
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      return await api('/profile')
+    },
+  })
+
+  useEffect(() => {
+    if (status === 'success') {
+      navigate('/app')
+    }
+  }, [
+    status,
+  ])
 
   return (
     <main
@@ -69,7 +90,7 @@ function AuthenticationLayout() {
             fallback={(
               <div className="w-full h-80" />
             )}>
-            <Outlet />
+            {status === 'error'  && <Outlet />}
           </Suspense>
         </div>
       </section>

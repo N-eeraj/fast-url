@@ -1,10 +1,11 @@
-import { use, useState } from 'react'
+import React, { use, useState } from 'react'
 import Button from '@components/base/Button'
 import DropDown from '@components/base/DropDown'
 import ProfileMenuActions from '@components/app-bar/profile-menu/Actions'
 import { UserContext } from '@contexts/User'
-import EditProfile from '@components/app-bar/profile-menu/EditProfile'
-import ChangePassword from '@components/app-bar/profile-menu/ChangePassword'
+
+const EditProfile = React.lazy(() => import('@components/app-bar/profile-menu/EditProfile'))
+const ChangePassword = React.lazy(() => import('@components/app-bar/profile-menu/ChangePassword'))
 
 function ProfileMenu() {
   const {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { type RouteObject } from 'react-router'
 import DashboardLayout from '@layouts/dashboard'
-import redirectRoutes from '@router/dashboard/redirects'
+import shortUrlRoutes from '@router/dashboard/shortUrl'
 
 const Dashboard = React.lazy(() => import('@pages/dashboard'))
 
@@ -13,7 +13,7 @@ const dashboardRoutes = [
         index: true,
         Component: Dashboard,
       },
-      ...redirectRoutes,
+      ...shortUrlRoutes,
     ]
   },
 ] as Array<RouteObject>

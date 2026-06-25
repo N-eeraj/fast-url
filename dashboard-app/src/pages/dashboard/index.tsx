@@ -1,6 +1,10 @@
+import CreateShortUrl from "@components/short-url/create"
+
 function Dashboard() {
   return (
-    <div>Dashboard</div>
+    <div>
+      <CreateShortUrl />
+    </div>
   )
 }
 

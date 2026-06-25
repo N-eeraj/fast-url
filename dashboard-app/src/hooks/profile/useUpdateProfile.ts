@@ -14,9 +14,7 @@ const updateProfileSchema = z.object({
   email: z.email('Please enter a valid email address'),
 })
 
-export type UpdateProfileFormValues = z.infer<
-  typeof updateProfileSchema
->
+export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>
 
 function useUpdateProfile(open: boolean) {
   const { user } = use(UserContext)

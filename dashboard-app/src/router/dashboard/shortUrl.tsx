@@ -2,11 +2,11 @@ import React from 'react'
 import { type RouteObject } from 'react-router'
 import NotFound from '@pages/not-found'
 
-const ViewRedirect = React.lazy(() => import('@pages/dashboard/redirect/[id]'))
+const ViewShortUrl = React.lazy(() => import('@/pages/dashboard/short-url/[id]'))
 
-const redirectRoutes = [
+const shortUrlRoutes = [
   {
-    path: 'redirects',
+    path: 'shortUrls',
     children: [
       {
         index: true,
@@ -14,10 +14,10 @@ const redirectRoutes = [
       },
       {
         path: ':id',
-        Component: ViewRedirect,
+        Component: ViewShortUrl,
       },
     ],
   },
 ] as Array<RouteObject>
 
-export default redirectRoutes
+export default shortUrlRoutes

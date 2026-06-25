@@ -27,9 +27,7 @@ const changePasswordSchema = z
       }
     )
 
-export type ChangePasswordFormValues = z.infer<
-  typeof changePasswordSchema
->
+export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
 
 export interface Args {
   open: boolean

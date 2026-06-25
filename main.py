@@ -4,7 +4,6 @@ from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.staticfiles import StaticFiles
 from datetime import datetime, timezone
 from routers import pages, api, redirect
-from database import create_db_and_tables
 from core.logger import logger, setup_logging
 from core.exception_handlers import custom_validation_exception_handler, custom_http_exception_handler
 
@@ -13,7 +12,6 @@ setup_logging()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting Up Server")
-    create_db_and_tables()
 
     yield
 

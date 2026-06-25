@@ -1,36 +1,44 @@
 from sqlmodel import SQLModel, Field
-from sqlalchemy import Column, String, DateTime, func
+from sqlalchemy import Column, ForeignKey, String, DateTime, func
 from datetime import datetime
 
-class Users(SQLModel, table=True):
-    __tablename__ = "users"
+class Urls(SQLModel, table=True):
+    __tablename__ = "urls"
 
     id: int | None = Field(
         default=None,
         primary_key=True,
     )
 
-    name: str = Field(
+    user_id: int = Field(
         sa_column=Column(
-            String(255),
+            ForeignKey(
+                "users.id",
+                ondelete="CASCADE",
+            ),
+            index=True,
             nullable=False,
         )
     )
 
-    email: str = Field(
+    short_code: str = Field(
         sa_column=Column(
             String(255),
-            index=True,
             unique=True,
             nullable=False,
         )
     )
 
-    password: str = Field(
+    destination_url: str = Field(
         sa_column=Column(
-            String(255),
+            String(768),
             nullable=False,
         )
+    )
+
+    is_active: bool = Field(
+        default=True,
+        nullable=False,
     )
 
     created_at: datetime = Field(

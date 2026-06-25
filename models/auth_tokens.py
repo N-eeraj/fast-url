@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column, ForeignKey, String, DateTime, func, text
 from datetime import datetime
-from sqlalchemy import Column, ForeignKey, DateTime, func, text
 
 class AuthTokens(SQLModel, table=True):
-    __tablename__: str = "auth_tokens"
+    __tablename__= "auth_tokens"
 
     id: int | None = Field(
         default=None,
@@ -13,20 +13,29 @@ class AuthTokens(SQLModel, table=True):
 
     user_id: int = Field(
         sa_column=Column(
-            ForeignKey("users.id"),
-            index=True
+            ForeignKey(
+                "users.id",
+                ondelete="CASCADE",
+            ),
+            index=True,
+            nullable=False,
         )
     )
 
     token: str = Field(
-        unique=True,
-        index=True,
+        sa_column=Column(
+            String(255),
+            index=True,
+            unique=True,
+            nullable=False,
+        )
     )
 
     created_at: datetime = Field(
         sa_column=Column(
             DateTime(timezone=True),
             server_default=func.now(),
+            nullable=False,
         ),
     )
 
@@ -35,12 +44,14 @@ class AuthTokens(SQLModel, table=True):
             DateTime(timezone=True),
             server_default=func.now(),
             onupdate=func.now(),
+            nullable=False,
         ),
     )
 
     expires_at: datetime = Field(
         sa_column=Column(
             DateTime(timezone=True),
-            server_default=text("DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 24 HOUR)")
+            server_default=text("DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 24 HOUR)"),
+            nullable=False,
         ),
     )

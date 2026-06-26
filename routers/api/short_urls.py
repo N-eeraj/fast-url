@@ -20,7 +20,7 @@ async def create_short_url(
     body: CreateShortUrlModel,
     session: Session=Depends(get_session),
 ):
-    short_url = await ShortUrlsService.create_short_url(
+    short_code = await ShortUrlsService.create_short_url(
         session=session,
         user_id=request.state.user["id"],
         destination_url=body.url,
@@ -30,6 +30,6 @@ async def create_short_url(
         "success": True,
         "message": "Shortened URL Successfully",
         "data": {
-            "short_url": short_url,
+            "short_code": short_code,
         },
     }

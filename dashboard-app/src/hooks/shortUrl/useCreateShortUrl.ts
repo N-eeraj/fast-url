@@ -37,13 +37,13 @@ function useCreateShortUrl(onSuccess: Args) {
     },
 
     onSuccess: (response: any) => {
-      const shortUrl = response?.data?.short_url
-      if (!shortUrl) {
+      const shortCode = response?.data?.short_code
+      if (!shortCode) {
         toast.error('Failed to shorten URL')
         return
       }
 
-      onSuccess(shortUrl)
+      onSuccess(shortCode)
 
       queryClient.invalidateQueries({
         queryKey: ['short-urls'],

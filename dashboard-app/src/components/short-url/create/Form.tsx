@@ -33,6 +33,7 @@ function ShortUrlForm({ onSuccess, onCancel }: Props) {
           type="button"
           variant="outline"
           className="flex-1"
+          disabled={isSubmitting}
           onClick={onCancel}>
           Cancel
         </Button>

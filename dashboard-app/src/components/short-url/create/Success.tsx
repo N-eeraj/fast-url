@@ -4,10 +4,12 @@ import { handleSuccess } from '@utils/toast'
 import { CopyIcon, CopyCheckIcon } from 'lucide-react'
 
 interface Props {
-  shortenedUrl: string
+  shortCode: string
 }
 
-function ShortUrlCreateSuccess({ shortenedUrl }: Props) {
+function ShortUrlCreateSuccess({ shortCode }: Props) {
+  const shortenedUrl = `${window.location.origin}/${shortCode}`
+
   const [copied, setCopied] = useState(false)
 
   const handleCopyUrl = () => {

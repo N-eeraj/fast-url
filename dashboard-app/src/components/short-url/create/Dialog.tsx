@@ -10,16 +10,16 @@ interface Props {
 }
 
 function ShortUrlDialog({ open, onClose }: Props) {
-  const [shortenedUrl, setShortenedUrl] = useState(null)
+  const [shortCode, setShortCode] = useState(null)
 
-  const title = shortenedUrl ? 'Your short link is ready' : 'Shorten your URL'
-  const description = shortenedUrl
+  const title = shortCode ? 'Your short link is ready' : 'Shorten your URL'
+  const description = shortCode
     ? 'Copy your shortened link below'
     : 'Paste a long URL and get a short link instantly'
 
   useEffect(() => {
     if (open) {
-      setShortenedUrl(null)
+      setShortCode(null)
     }
   }, [
     open,
@@ -31,12 +31,12 @@ function ShortUrlDialog({ open, onClose }: Props) {
       title={title}
       description={description}
       onOpenChange={onClose}>
-      {shortenedUrl ? (
-        <CreateSuccess shortenedUrl={shortenedUrl} />
+      {shortCode ? (
+        <CreateSuccess shortCode={shortCode} />
       ) : (
         <ShortUrlForm
           onCancel={onClose}
-          onSuccess={setShortenedUrl} />
+          onSuccess={setShortCode} />
       )}
     </Dialog>
   )

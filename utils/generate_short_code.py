@@ -54,6 +54,9 @@ def generate_code(id: int) -> str:
     scrambled = feistel_encrypt(id)
     return base62_encode(scrambled)
 
-def recover_id(code: str) -> int:
-    scrambled = base62_decode(code)
-    return feistel_decrypt(scrambled)
+def recover_id(code: str) -> int | None:
+    try:
+        scrambled = base62_decode(code)
+        return feistel_decrypt(scrambled)
+    except:
+        return None

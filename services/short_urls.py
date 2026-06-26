@@ -37,3 +37,20 @@ class ShortUrlsService:
         result = redirect_entry.copy()
         result.pop("user_id", None)
         return result
+
+    @staticmethod
+    async def get_redirect_url(
+        session: Session,
+        short_code: str
+    ) -> str | None:
+        url_id = recover_id(short_code)
+
+        if not url_id:
+            return None
+
+        redirect_url = await ShortUrlsRepository.get_destination_url_by_id(
+            session=session,
+            id=url_id,
+        )
+
+        return redirect_url

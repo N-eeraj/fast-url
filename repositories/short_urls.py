@@ -6,7 +6,7 @@ class ShortUrlsRepository:
     @staticmethod
     async def get_last_entry_id(
         session: Session,
-    ) -> bool:
+    ) -> int:
         last_short_url_entry_statement = select(Urls.id).order_by(Urls.id.desc())
         last_entry_id = session.exec(last_short_url_entry_statement).first()
         return last_entry_id
@@ -30,3 +30,14 @@ class ShortUrlsRepository:
 
         url = ShortUrlRecordModel.model_validate(url.model_dump())
         return url.model_dump()
+
+    @staticmethod
+    async def get_destination_url_by_id(
+        session: Session,
+        id: int,
+    ):
+        find_destination_url_statement = select(Urls.destination_url).where(
+            Urls.id == id,
+        )
+        destination_url = session.exec(find_destination_url_statement).first()
+        return destination_url

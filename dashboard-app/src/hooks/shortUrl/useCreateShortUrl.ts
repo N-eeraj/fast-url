@@ -7,7 +7,8 @@ import { queryClient } from '@/QueryProvider'
 import { handleError, toast } from '@utils/toast'
 
 const createShortUrlSchema = z.object({
-  url: z.url('Please enter a valid URL'),
+  name: z.string('Please enter a name to identify this URL'),
+  destination_url: z.url('Please enter a valid URL'),
 })
 
 export type CreateShortUrlFormValues = z.infer<typeof createShortUrlSchema>
@@ -24,7 +25,8 @@ function useCreateShortUrl(onSuccess: Args) {
   } = useForm<CreateShortUrlFormValues>({
     resolver: zodResolver(createShortUrlSchema),
     defaultValues: {
-      url: '',
+      name: '',
+      destination_url: '',
     },
   })
 

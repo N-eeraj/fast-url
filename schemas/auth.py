@@ -10,7 +10,7 @@ class RegisterModel(UserBaseModel):
             "at least one uppercase letter, one lowercase letter, one number, "
             "and one special character."
         ),
-        examples=["SecurePass123!"],
+        example="SecurePass123!",
     )
 
     @field_validator("password")
@@ -22,13 +22,13 @@ class LoginModel(BaseModel):
     email: str = Field(
         ...,
         description="Registered email address of the user.",
-        examples=["john.doe@example.com"],
+        example="john.doe@example.com",
     )
 
     password: str = Field(
         ...,
         description="User account password.",
-        examples=["SecurePass123!"],
+        example="SecurePass123!",
     )
 
     @field_validator("email")
@@ -45,7 +45,7 @@ class UserResponseModel(UserBaseModel):
     id: int = Field(
         ...,
         description="User id",
-        examples=[1]
+        example=1,
     )
 
 class UserWithPasswordModel(UserResponseModel):

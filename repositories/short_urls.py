@@ -15,11 +15,13 @@ class ShortUrlsRepository:
     async def create_short_code(
         session: Session,
         data: ShortUrlDataModel,
-    ) -> ShortUrlRecordModel:
+    ):
         url = Urls(
             user_id=data.user_id,
-            short_code=data.short_code,
+            name=data.name,
             destination_url=data.destination_url,
+            short_code=data.short_code,
+            is_active=True,
         )
         
         session.add(url)

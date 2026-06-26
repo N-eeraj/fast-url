@@ -20,12 +20,19 @@ function ShortUrlForm({ onSuccess, onCancel }: Props) {
       className="space-y-5"
       onSubmit={onSubmit}>
       <Input
+        label="Name"
+        placeholder="My Website"
+        autoFocus
+        error={errors.name?.message}
+        {...register("name")}
+      />
+
+      <Input
         label="Long URL"
         type="url"
         placeholder="https://example.com/very/long/link"
-        autoFocus
-        error={errors.url?.message}
-        {...register("url")}
+        error={errors.destination_url?.message}
+        {...register("destination_url")}
       />
 
       <div className="flex items-center gap-2">

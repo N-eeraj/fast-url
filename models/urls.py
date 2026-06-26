@@ -21,10 +21,9 @@ class Urls(SQLModel, table=True):
         )
     )
 
-    short_code: str = Field(
+    name: str = Field(
         sa_column=Column(
             String(255),
-            unique=True,
             nullable=False,
         )
     )
@@ -32,6 +31,14 @@ class Urls(SQLModel, table=True):
     destination_url: str = Field(
         sa_column=Column(
             String(768),
+            nullable=False,
+        )
+    )
+
+    short_code: str = Field(
+        sa_column=Column(
+            String(255),
+            unique=True,
             nullable=False,
         )
     )

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from pydantic import BaseModel, Field, field_validator
 from pydantic_core import PydanticCustomError
 from urllib.parse import urlparse
 
@@ -24,19 +24,25 @@ def validate_url(url: str):
 
 # schemas
 class CreateShortUrlModel(BaseModel):
-    url: str = Field(
+    name: str = Field(
         ...,
-        description="The original long URL to be shortened",
-        examples=["https://example.com/some/very/long/path"],
+        description="A user-provided identifier for the URL shortener entry (used as the URL slug or alias).",
+        example="My Link",
     )
 
-    @field_validator("url")
+    destination_url: str = Field(
+        ...,
+        description="The original destination URL that the short code redirects to.",
+        example="https://example.com/products/123",
+    )
+
+    @field_validator("destination_url")
     @classmethod
-    def validate_url_field(cls, url: str) -> str:
-        return validate_url(url)
+    def validate_destination_url_field(cls, destination_url: str) -> str:
+        return validate_url(destination_url)
 
 
-class ShortUrlDataModel(BaseModel):
+class ShortUrlDataModel(CreateShortUrlModel):
     user_id: int = Field(
         ...,
         description="Unique identifier of the user who owns the short URL.",
@@ -48,16 +54,10 @@ class ShortUrlDataModel(BaseModel):
         example="abc123",
     )
 
-    destination_url: HttpUrl = Field(
-        ...,
-        description="The original destination URL that the short code redirects to.",
-        example="https://example.com/products/123",
-    )
-
-    is_active: bool = Field(
-        ...,
+    is_active: bool | None = Field(
         description="Indicates whether the short URL is active and can be used.",
         example=True,
+        default=True,
     )
 
 class ShortUrlRecordModel(ShortUrlDataModel):

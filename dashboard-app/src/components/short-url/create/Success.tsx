@@ -26,7 +26,7 @@ function ShortUrlCreateSuccess({ shortCode }: Props) {
       <a
         href={shortenedUrl}
         target="_blank"
-        className="text-sm font-medium text-foreground hover:text-primary break-all hover:underline duration-400">
+        className="text-sm font-medium text-secondary hover:text-primary break-all hover:underline duration-400">
         {shortenedUrl}
       </a>
     

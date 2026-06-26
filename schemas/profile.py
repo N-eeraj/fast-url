@@ -9,7 +9,7 @@ class UpdatePasswordModel(BaseModel):
     password: str = Field(
         ...,
         description="User account password.",
-        examples=["SecurePass123!"],
+        example="SecurePass123!",
     )
 
     new_password: str = Field(
@@ -19,7 +19,7 @@ class UpdatePasswordModel(BaseModel):
             "at least one uppercase letter, one lowercase letter, one number, "
             "and one special character."
         ),
-        examples=["NewSecurePass123!"],
+        example="NewSecurePass123!",
     )
 
     @field_validator("password")

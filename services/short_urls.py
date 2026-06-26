@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from repositories.short_urls import ShortUrlsRepository
-from schemas.short_urls import ShortUrlDataModel
+from schemas.short_urls import ShortUrlDataModel, CreateShortUrlModel
 from utils.generate_short_code import generate_code, recover_id
 
 class ShortUrlsService:
@@ -19,18 +19,21 @@ class ShortUrlsService:
     async def create_short_url(
         session: Session,
         user_id: int,
-        destination_url: str,
+        data: CreateShortUrlModel,
     ) -> str:
         short_code = await ShortUrlsService.generate_short_code(session)
-        data = {
+        redirect = {
             "user_id": user_id,
+            "name": data.name,
+            "destination_url": data.destination_url,
             "short_code": short_code,
-            "destination_url": destination_url,
-            "is_active": True,
         }
+
         redirect_entry = await ShortUrlsRepository.create_short_code(
             session=session,
-            data=ShortUrlDataModel.model_validate(data),
+            data=ShortUrlDataModel.model_validate(redirect),
         )
 
-        return redirect_entry["short_code"]
+        result = redirect_entry.copy()
+        result.pop("user_id", None)
+        return result

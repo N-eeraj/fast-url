@@ -76,13 +76,13 @@ class UserBaseModel(BaseModel):
     name: str = Field(
         ...,
         description="Full name of the user. Must contain at least 2 characters.",
-        examples=["John Doe"],
+        example="John Doe",
     )
 
     email: str = Field(
         ...,
         description="Valid email address used for account registration.",
-        examples=["john.doe@example.com"],
+        example="john.doe@example.com",
     )
 
     @field_validator("name")

@@ -23,9 +23,9 @@ class ProfileService:
             )
 
         await UserRepository.update_user(
-            session,
-            user_id,
-            data,
+            session=session,
+            user_id=user_id,
+            data=data,
         )
 
     @staticmethod
@@ -35,8 +35,8 @@ class ProfileService:
         data: UpdatePasswordModel,
     ):
         user_by_id = await UserRepository.get_user_by_id(
-            session,
-            user_id,
+            session=session,
+            user_id=user_id,
         )
 
         is_matching_password = bcrypt.checkpw(
@@ -56,7 +56,7 @@ class ProfileService:
         hashed_new_password = bcrypt.hashpw(data.new_password.encode("utf-8"), salt)
 
         await UserRepository.update_password(
-            session,
-            user_id,
-            hashed_new_password,
+            session=session,
+            user_id=user_id,
+            data=hashed_new_password,
         )

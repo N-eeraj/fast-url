@@ -36,9 +36,9 @@ async def update_profile(
     session: Session=Depends(get_session),
 ):
     await ProfileService.update_user(
-        session,
-        request.state.user["id"],
-        body,
+        session=session,
+        user_id=request.state.user["id"],
+        data=body,
     )
 
     return {
@@ -53,9 +53,9 @@ async def change_password(
     session: Session=Depends(get_session),
 ):
     await ProfileService.update_password(
-        session,
-        request.state.user["id"],
-        body,
+        session=session,
+        user_id=request.state.user["id"],
+        data=body,
     )
 
     return {

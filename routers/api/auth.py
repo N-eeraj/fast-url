@@ -19,7 +19,10 @@ async def register(
     body: RegisterModel,
     session: Session=Depends(get_session),
 ):
-    (data, auth_token) = await AuthService.register(session, body)
+    (data, auth_token) = await AuthService.register(
+        session=session,
+        data=body,
+    )
 
     response.set_cookie(
         key="auth_token",
@@ -40,7 +43,10 @@ async def login(
     body: LoginModel,
     session: Session=Depends(get_session),
 ):
-    (data, auth_token) = await AuthService.login(session, body)
+    (data, auth_token) = await AuthService.login(
+        session=session,
+        data=body,
+    )
 
     response.set_cookie(
         key="auth_token",
@@ -62,7 +68,10 @@ async def logout(
     session: Session=Depends(get_session),
 ):
     hashed_token = request.state.user["hashed_token"]
-    await AuthService.logout(session, hashed_token)
+    await AuthService.logout(
+        session=session,
+        hashed_token=hashed_token
+    )
 
     response.delete_cookie(key="auth_token")
 

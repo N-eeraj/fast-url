@@ -10,7 +10,7 @@ interface Props {
 }
 
 function ShortUrlDialog({ open, onClose }: Props) {
-  const [shortCode, setShortCode] = useState(null)
+  const [shortCode, setShortCode] = useState<string | null>(null)
 
   const title = shortCode ? 'Your short link is ready' : 'Shorten your URL'
   const description = shortCode

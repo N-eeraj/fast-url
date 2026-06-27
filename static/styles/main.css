@@ -16,6 +16,8 @@
   --destructive: #c52a2a;
   --destructive-foreground: #f8fafc;
   --border: #e2e8f0;
+  --active: #249f45;
+  --inactive: #9f2424;
 }
 
 .dark {
@@ -36,6 +38,8 @@
   --destructive: #ba3434;
   --destructive-foreground: #f8fafc;
   --border: #1e293b;
+  --active: #2ac553;
+  --inactive: #c52a2a;
 }
 
 * {

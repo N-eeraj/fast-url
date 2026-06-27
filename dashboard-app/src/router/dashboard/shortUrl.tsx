@@ -2,18 +2,18 @@ import React from 'react'
 import { type RouteObject } from 'react-router'
 import NotFound from '@pages/not-found'
 
-const ViewShortUrl = React.lazy(() => import('@/pages/dashboard/short-url/[id]'))
+const ViewShortUrl = React.lazy(() => import('@/pages/dashboard/short-url/[shortCode]'))
 
 const shortUrlRoutes = [
   {
-    path: 'shortUrls',
+    path: 'short-url',
     children: [
       {
         index: true,
         Component: NotFound,
       },
       {
-        path: ':id',
+        path: ':shortCode',
         Component: ViewShortUrl,
       },
     ],

@@ -29,11 +29,11 @@ function ShortUrlCreateSuccess({ shortCode }: Props) {
         className="text-sm font-medium text-secondary hover:text-primary break-all hover:underline duration-400">
         {shortenedUrl}
       </a>
-    
+
       <Button
         variant="ghost"
         disabled={copied}
-        className="shrink-0 text-xs font-medium text-primary hover:underline"
+        className="shrink-0 text-xs font-medium text-primary"
         onClick={handleCopyUrl}>
         {copied ? <CopyCheckIcon /> : <CopyIcon />}
         <span>

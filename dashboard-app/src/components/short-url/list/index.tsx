@@ -1,47 +1,22 @@
-import { useSearchParams } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
-import useApi from '@hooks/useApi'
+import GlobalLoader from '@components/GlobalLoader'
+import ShortUrlCard from '@components/short-url/list/Card'
+import useFetchShortUrls from '@hooks/shortUrl/useFetchShortUrls'
 
 function ShortUrlList() {
-  const api = useApi()
-
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const page = Number(searchParams.get('page') ?? 1)
-  const search = searchParams.get('search') ?? ''
-  const limit = Number(searchParams.get('limit') ?? 10)
-  const sort = searchParams.get('sort') ?? 'desc'
-
   const {
-    data,
     isLoading,
-  } = useQuery({
-    queryKey: ['short-urls', page, search, limit, sort],
-    queryFn: async () => {
-      const response = await api('/short-urls', {
-        query: {
-          search,
-          page: `${page}`,
-          limit: `${limit}`,
-          sort,
-        }
-      })
+    data,
+  } = useFetchShortUrls()
 
-      if (
-        response &&
-        typeof response === 'object' &&
-        'data' in response
-      ) {
-        return response.data
-      }
-
-      return null
-    },
-  })
+  if (isLoading) return <GlobalLoader />
 
   return (
-    <ul>
-      {isLoading ? 'Loading...' : JSON.stringify(data)}
+    <ul className="grid sm:grid-cols-[repeat(auto-fill,minmax(420px,1fr))] gap-4">
+      {data?.map((item) => (
+        <li key={item.id}>
+          <ShortUrlCard {...item} />
+        </li>
+      ))}
     </ul>
   )
 }

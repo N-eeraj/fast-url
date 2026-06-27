@@ -27,7 +27,7 @@ export default function BaseButton({
       disabled={disabled || loading}
       className={cn(
         "relative transition-all duration-300",
-        !loading && "disabled:grayscale-50",
+        !loading && "disabled:grayscale-50 disabled:cursor-not-allowed",
         className,
       )}
       {...props}>

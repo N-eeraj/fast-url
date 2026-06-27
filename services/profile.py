@@ -58,5 +58,5 @@ class ProfileService:
         await UserRepository.update_password(
             session=session,
             user_id=user_id,
-            data=hashed_new_password,
+            hashed_password=hashed_new_password,
         )

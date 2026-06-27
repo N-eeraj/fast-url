@@ -54,3 +54,19 @@ class ShortUrlsService:
         )
 
         return redirect_url
+
+    @staticmethod
+    async def get_short_url_list(
+        session: Session,
+        user_id: int,
+        filters: dict[str, any],
+    ):
+        data = await ShortUrlsRepository.get_short_url_list(
+            session=session,
+            user_id=user_id,
+            search=filters["search"],
+            page=filters["page"],
+            limit=filters["limit"],
+            sort=filters["sort"],
+        )
+        return data

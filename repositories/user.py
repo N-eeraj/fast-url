@@ -38,14 +38,14 @@ class UserRepository:
     @staticmethod
     async def get_user_by_id(
         session: Session,
-        id: int
+        user_id: int
     ) -> UserWithPasswordModel | None:
         user_by_id_statement = select(
             Users.id,
             Users.name,
             Users.email,
             Users.password,
-        ).where(Users.id == id)
+        ).where(Users.id == user_id)
         user_by_id = session.exec(user_by_id_statement).first()
 
         if not user_by_id: return None

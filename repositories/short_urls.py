@@ -1,4 +1,5 @@
 from sqlmodel import Session, select
+from sqlalchemy import or_
 from models.urls import Urls
 from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
 
@@ -41,3 +42,40 @@ class ShortUrlsRepository:
         )
         destination_url = session.exec(find_destination_url_statement).first()
         return destination_url
+
+    @staticmethod
+    async def get_short_url_list(
+        session: Session,
+        user_id: int,
+        search: str,
+        page: int,
+        limit: int,
+        sort: str,
+    ):
+        offset = (page - 1) * limit
+        short_url_list_statement = select(
+            Urls.id,
+            Urls.name,
+            Urls.destination_url,
+            Urls.short_code,
+            Urls.is_active,
+            Urls.updated_at,
+            Urls.created_at,
+        ).where(Urls.user_id == user_id)
+
+        if search:
+            search_filter = or_(
+                Urls.name.ilike(f"%{search}%"),
+                Urls.destination_url.ilike(f"%{search}%"),
+            )
+            short_url_list_statement = short_url_list_statement.where(search_filter)
+
+        if sort == "desc":
+            short_url_list_statement = short_url_list_statement.order_by(Urls.created_at.desc())
+        else:
+            short_url_list_statement = short_url_list_statement.order_by(Urls.created_at.asc())
+
+        short_url_list_statement = short_url_list_statement.offset(offset).limit(limit)
+
+        short_url_list = session.exec(short_url_list_statement).mappings().all()
+        return short_url_list

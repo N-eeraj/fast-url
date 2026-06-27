@@ -31,3 +31,31 @@ async def create_short_url(
         "message": "Shortened URL Successfully",
         "data": data,
     }
+
+@router.get(ROOT, response_class=JSONResponse)
+async def get_user_short_urls(
+    request: Request,
+    session: Session=Depends(get_session),
+    search: str = "",
+    page: int = 1,
+    limit: int = 10,
+    sort: str = "desc",
+):
+    filters = {
+        "search": search.strip(),
+        "page": page,
+        "limit": limit,
+        "sort": "asc" if sort.strip() == "asc" else "desc"
+    }
+
+    data = await ShortUrlsService.get_short_url_list(
+        session=session,
+        user_id=request.state.user["id"],
+        filters=filters,
+    )
+
+    return {
+        "success": True,
+        "message": "Fetched Shortened URLs Successfully",
+        "data": data,
+    }

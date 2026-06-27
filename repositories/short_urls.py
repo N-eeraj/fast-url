@@ -1,5 +1,5 @@
-from sqlmodel import Session, select
-from sqlalchemy import or_, and_
+from sqlmodel import Session, select, update
+from sqlalchemy import or_, and_, not_
 from models.urls import Urls
 from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
 
@@ -82,3 +82,20 @@ class ShortUrlsRepository:
 
         short_url_list = session.exec(short_url_list_statement).mappings().all()
         return short_url_list
+
+    @staticmethod
+    async def toggle_active_status(
+        session: Session,
+        id: int,
+        user_id: int
+    ):
+        toggle_active_status_statement = update(Urls).where(
+            and_(
+                Urls.id == id,
+                Urls.user_id == user_id,
+            )
+        ).values(
+            is_active=not_(Urls.is_active)
+        )
+        session.exec(toggle_active_status_statement)
+        session.commit()

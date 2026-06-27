@@ -70,3 +70,15 @@ class ShortUrlsService:
             sort=filters["sort"],
         )
         return data
+
+    @staticmethod
+    async def toggle_active_status(
+        session: Session,
+        id: int,
+        user_id: int,
+    ):
+        await ShortUrlsRepository.toggle_active_status(
+            session=session,
+            id=id,
+            user_id=user_id,
+        )

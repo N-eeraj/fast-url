@@ -59,3 +59,20 @@ async def get_user_short_urls(
         "message": "Fetched Shortened URLs Successfully",
         "data": data,
     }
+
+@router.patch("/{id}/toggle-status", response_class=JSONResponse)
+async def toggle_active_status(
+    request: Request,
+    id: int,
+    session: Session=Depends(get_session),
+):
+    await ShortUrlsService.toggle_active_status(
+        session=session,
+        id=id,
+        user_id=request.state.user["id"],
+    )
+
+    return {
+        "success": True,
+        "message": "Updated Status Successfully",
+    }

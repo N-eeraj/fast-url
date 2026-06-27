@@ -11,7 +11,7 @@ function CreateShortUrl() {
     <>
       <BaseButton
         size="icon-lg"
-        className="fixed bottom-4 right-4 size-fit p-2 rounded-full hover:rotate-90"
+        className="fixed bottom-4 right-4 size-fit p-2 rounded-full hover:rotate-90 hover:bg-primary"
         onClick={() => setOpen(true)}>
         <PlusIcon className="size-10" />
       </BaseButton>

@@ -71,14 +71,14 @@ function ShortUrlData() {
             target="_blank"
             title={is_active ? "Shortened URL" : "This URL is inactive"}
             className={clsx(
-              "group/short-url flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-foreground",
+              "group/short-url flex items-center gap-2 max-w-[calc(100%-80px)] rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-foreground",
               is_active ? "hover:bg-muted transition" : "cursor-not-allowed!",
             )}>
             <span className="font-mono truncate">
               {shortenedUrl}
             </span>
             {is_active && (
-              <SquareArrowOutUpRightIcon className="size-3.5 text-muted-foreground group-hover/short-url:text-foreground transition" />
+              <SquareArrowOutUpRightIcon className="shrink-0 size-3.5 text-muted-foreground group-hover/short-url:text-foreground transition" />
             )}
           </a>
 

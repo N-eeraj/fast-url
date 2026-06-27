@@ -1,4 +1,4 @@
-from sqlmodel import Session, select, update
+from sqlmodel import Session, select, update, func
 from sqlalchemy import or_, and_, not_
 from models.urls import Urls
 from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
@@ -64,7 +64,9 @@ class ShortUrlsRepository:
             Urls.is_active,
             Urls.updated_at,
             Urls.created_at,
-        ).where(Urls.user_id == user_id)
+        ).where(
+            Urls.user_id == user_id
+        )
 
         if search:
             search_filter = or_(
@@ -81,7 +83,14 @@ class ShortUrlsRepository:
         short_url_list_statement = short_url_list_statement.offset(offset).limit(limit)
 
         short_url_list = session.exec(short_url_list_statement).mappings().all()
-        return short_url_list
+
+        total_count = session.exec(
+            select(func.count()).select_from(Urls).where(
+                Urls.user_id == user_id
+            )
+        ).one()
+
+        return (short_url_list, total_count)
 
     @staticmethod
     async def toggle_active_status(

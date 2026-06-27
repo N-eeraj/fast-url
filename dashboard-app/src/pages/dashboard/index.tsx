@@ -3,8 +3,8 @@ import ShortUrlList from "@components/short-url/list"
 
 function Dashboard() {
   return (
-    <div className="pb-16">
-      <div className="mb-6">
+    <div className="pb-16 space-y-4">
+      <div>
         <h1 className="text-2xl font-semibold">
           Your Links
         </h1>

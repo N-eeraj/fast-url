@@ -1,3 +1,4 @@
+from math import ceil
 from sqlmodel import Session
 from repositories.short_urls import ShortUrlsRepository
 from schemas.short_urls import ShortUrlDataModel, CreateShortUrlModel
@@ -61,7 +62,7 @@ class ShortUrlsService:
         user_id: int,
         filters: dict[str, any],
     ):
-        data = await ShortUrlsRepository.get_short_url_list(
+        (data, total_count) = await ShortUrlsRepository.get_short_url_list(
             session=session,
             user_id=user_id,
             search=filters["search"],
@@ -69,7 +70,14 @@ class ShortUrlsService:
             limit=filters["limit"],
             sort=filters["sort"],
         )
-        return data
+
+        meta_data = {
+            "current_page": filters["page"],
+            "total_pages": ceil(total_count / filters["limit"]),
+            "total_count": total_count,
+        }
+
+        return (data, meta_data)
 
     @staticmethod
     async def toggle_active_status(

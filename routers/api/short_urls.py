@@ -48,7 +48,7 @@ async def get_user_short_urls(
         "sort": "asc" if sort.strip() == "asc" else "desc"
     }
 
-    data = await ShortUrlsService.get_short_url_list(
+    (data, meta_data) = await ShortUrlsService.get_short_url_list(
         session=session,
         user_id=request.state.user["id"],
         filters=filters,
@@ -58,6 +58,7 @@ async def get_user_short_urls(
         "success": True,
         "message": "Fetched Shortened URLs Successfully",
         "data": data,
+        "meta": meta_data
     }
 
 @router.patch("/{id}/toggle-status", response_class=JSONResponse)

@@ -3,7 +3,7 @@ import Dialog from '@components/base/Dialog'
 import Button from '@components/base/Button'
 import { ShortUrlContext } from '@contexts/ShortUrlCard'
 
-function ToggleStatus() {
+function ToggleStatusConfirmation() {
   const {
     is_active,
     openToggleStatusConfirmation,
@@ -44,4 +44,4 @@ function ToggleStatus() {
   )
 }
 
-export default ToggleStatus
+export default ToggleStatusConfirmation

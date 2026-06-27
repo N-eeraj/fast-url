@@ -1,4 +1,4 @@
-from sqlmodel import Session, select, update, func
+from sqlmodel import Session, select, update, delete, func
 from sqlalchemy import or_, and_, not_
 from models.urls import Urls
 from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
@@ -91,6 +91,21 @@ class ShortUrlsRepository:
         ).one()
 
         return (short_url_list, total_count)
+
+    @staticmethod
+    async def delete_short_url(
+        session: Session,
+        id: int,
+        user_id: int
+    ):
+        delete_short_url_statement = delete(Urls).where(
+            and_(
+                Urls.id == id,
+                Urls.user_id == user_id,
+            )
+        )
+        session.exec(delete_short_url_statement)
+        session.commit()
 
     @staticmethod
     async def toggle_active_status(

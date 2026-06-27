@@ -10,6 +10,7 @@ import {
   LineChartIcon,
   PowerIcon,
   PowerOffIcon,
+  Trash2Icon,
 } from 'lucide-react'
 
 function ShortUrlCardAction() {
@@ -17,8 +18,10 @@ function ShortUrlCardAction() {
     is_active,
     short_code,
     isTogglingStatus,
+    isDeleting,
     setOpenEditDialog,
     setOpenToggleStatusConfirmation,
+    setOpenDeleteConfirmation,
   } = use(ShortUrlContext)
 
   const ActivationToggleIcon = is_active ? PowerOffIcon : PowerIcon
@@ -31,7 +34,7 @@ function ShortUrlCardAction() {
             <Button
               variant="ghost"
               disabled={isTogglingStatus}
-              className="flex w-full justify-start items-center gap-x-2 px-1.5 py-1 h-fit"
+              className="flex w-full justify-start items-center gap-x-2 h-fit px-1.5 py-1"
               onClick={() => setOpenEditDialog(true)}>
               <PenIcon className="size-3.5" />
               <span className="text-xs">
@@ -53,11 +56,23 @@ function ShortUrlCardAction() {
             <Button
               variant="ghost"
               disabled={isTogglingStatus}
-              className="flex w-full justify-start items-center gap-x-2 px-1.5 py-1 h-fit"
+              className="flex w-full justify-start items-center gap-x-2 h-fit px-1.5 py-1"
               onClick={() => setOpenToggleStatusConfirmation(true)}>
               <ActivationToggleIcon className="size-3.5" />
               <span className="text-xs">
                 {is_active ? "Deactivate" : "Activate"}
+              </span>
+            </Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="p-0">
+            <Button
+              variant="destructive"
+              disabled={isTogglingStatus}
+              className="flex w-full justify-start items-center gap-x-2 h-fit px-1.5 py-1 hover:bg-destructive!"
+              onClick={() => setOpenDeleteConfirmation(true)}>
+              <Trash2Icon className="size-3.5" />
+              <span className="text-xs">
+                Delete
               </span>
             </Button>
           </DropdownMenuItem>
@@ -69,6 +84,7 @@ function ShortUrlCardAction() {
       <Button
         variant="ghost"
         size="icon-sm"
+        loading={isDeleting}
         className="rounded-md text-sm">
         <EllipsisVerticalIcon />
       </Button>

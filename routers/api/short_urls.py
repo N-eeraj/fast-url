@@ -61,6 +61,23 @@ async def get_user_short_urls(
         "meta": meta_data
     }
 
+@router.delete("/{id}", response_class=JSONResponse)
+async def delete_short_url(
+    request: Request,
+    id: int,
+    session: Session=Depends(get_session),
+):
+    await ShortUrlsService.delete_short_url(
+        session=session,
+        id=id,
+        user_id=request.state.user["id"],
+    )
+
+    return {
+        "success": True,
+        "message": "Deleted URL Successfully",
+    }
+
 @router.patch("/{id}/toggle-status", response_class=JSONResponse)
 async def toggle_active_status(
     request: Request,

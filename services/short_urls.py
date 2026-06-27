@@ -80,6 +80,18 @@ class ShortUrlsService:
         return (data, meta_data)
 
     @staticmethod
+    async def delete_short_url(
+        session: Session,
+        id: int,
+        user_id: int,
+    ):
+        await ShortUrlsRepository.delete_short_url(
+            session=session,
+            id=id,
+            user_id=user_id,
+        )
+
+    @staticmethod
     async def toggle_active_status(
         session: Session,
         id: int,

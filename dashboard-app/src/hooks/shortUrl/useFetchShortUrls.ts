@@ -14,7 +14,7 @@ function useFetchShortUrls() {
   const search = searchParams.get('search') ?? ''
   const [searchInput, setSearchInput] = useState(search)
   const debouncedSearch = useDebounce(searchInput, 500)
-  const itemsPerPage = Number(searchParams.get('itemsPerPage') ?? 10)
+  const itemsPerPage = Number(searchParams.get('items-per-page') ?? 10)
   const sort = searchParams.get('sort') ?? 'desc'
   const [totalPages, setTotalPages] = useState(0)
 
@@ -96,7 +96,7 @@ function useFetchShortUrls() {
 
   const setItemsPerPage = (itemsPerPage: number) => {
     updateSearchParams({
-      itemsPerPage,
+      'items-per-page': itemsPerPage,
       page: 1,
     })
   }

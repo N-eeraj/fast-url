@@ -14,6 +14,7 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
   const [copied, setCopied] = useState(false)
   const [openEditDialog, setOpenEditDialog] = useState(false)
   const [openToggleStatusConfirmation, setOpenToggleStatusConfirmation] = useState(false)
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(null)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(shortenedUrl)
@@ -46,6 +47,29 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
     },
   })
 
+  const {
+    isPending: isDeleting,
+    mutate: deleteShortUrl,
+  } = useMutation({
+    mutationFn: async () => {
+      setOpenDeleteConfirmation(false)
+      return await api(`/short-urls/${id}`, {
+        method: 'DELETE',
+      })
+    },
+    onSuccess: ({ message }) => {
+      handleSuccess(message)
+      queryClient.invalidateQueries({
+        queryKey: ['short-urls'],
+      })
+    },
+    onError: (error: unknown) => {
+      handleError(error, {
+        showToast: true,
+      })
+    },
+  })
+
   let activeStatusText = is_active ? 'Active' : 'Inactive'
   if (isTogglingStatus) {
     activeStatusText = is_active ? 'Deactivating' : 'Activating'
@@ -56,12 +80,16 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
     activeStatusText,
     copied,
     openEditDialog,
-    isTogglingStatus,
     openToggleStatusConfirmation,
+    openDeleteConfirmation,
+    isTogglingStatus,
+    isDeleting,
     handleCopy,
     setOpenEditDialog,
     setOpenToggleStatusConfirmation,
+    setOpenDeleteConfirmation,
     toggleStatus,
+    deleteShortUrl,
   }
 }
 

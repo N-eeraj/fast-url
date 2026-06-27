@@ -48,7 +48,7 @@ class ShortUrlsService:
         if not url_id:
             return None
 
-        redirect_url = await ShortUrlsRepository.get_destination_url_by_id(
+        redirect_url = await ShortUrlsRepository.get_active_destination_url_by_id(
             session=session,
             id=url_id,
         )

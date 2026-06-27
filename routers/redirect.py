@@ -27,5 +27,5 @@ async def redirect_route(
 
     return RedirectResponse(
         url=redirect_url,
-        status_code=status.HTTP_301_MOVED_PERMANENTLY,
+        status_code=status.HTTP_307_TEMPORARY_REDIRECT,
     )

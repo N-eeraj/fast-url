@@ -1,44 +1,32 @@
-import { useState } from 'react'
 import Button from '@components/base/Button'
 import ShortUrlCardAction from '@components/short-url/list/Card/Action'
-import { handleSuccess } from '@utils/toast'
+import useShortUrlCard from '@hooks/shortUrl/useShortUrlCard'
 import {
   CopyIcon,
   CopyCheckIcon,
   SquareArrowOutUpRightIcon,
 } from 'lucide-react'
 import clsx from 'clsx'
+import type { ShortUrl } from '@/types'
 
-export interface ShortUrl {
-  id: number
-  name: string
-  destination_url: string
-  is_active: boolean
-  short_code: string
-  created_at: string
-  updated_at: string
-}
+function ShortUrlCard(shortUrl: ShortUrl) {
+  const {
+    shortenedUrl,
+    copied,
+    handleCopy,
+    handleEdit,
+    handleToggleActiveStatus,
+  } = useShortUrlCard(shortUrl)
 
-function ShortUrlCard({
-  name,
-  destination_url,
-  is_active,
-  short_code,
-  created_at,
-  updated_at,
-}: ShortUrl) {
-  const origin = window.location.origin
-  const shortenedUrl = `${origin}/${short_code}`
-
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(shortenedUrl)
-    setCopied(true)
-    handleSuccess('Copied URL to clipboard')
-
-    setTimeout(() => setCopied(false), 1200)
-  }
+  const {
+    id,
+    destination_url,
+    name,
+    short_code,
+    is_active,
+    created_at,
+    updated_at,
+  } = shortUrl
 
   return (
     <div className="group flex flex-col gap-y-2 h-full rounded-xl border border-border bg-card text-card-foreground p-3 shadow-sm transition-all hover:shadow-md">
@@ -46,6 +34,7 @@ function ShortUrlCard({
         <h2 className="text-lg font-semibold tracking-tight text-card-foreground truncate">
           {name}
         </h2>
+
         <div className="flex items-center gap-x-1">
           <span
             className={clsx(
@@ -62,8 +51,11 @@ function ShortUrlCard({
 
           <ShortUrlCardAction
             is_active={is_active}
-            short_code={short_code} />
+            short_code={short_code}
+            onEdit={handleEdit}
+            onToggleActiveStatus={handleToggleActiveStatus} />
         </div>
+
         <a
           href={destination_url}
           target="_blank"

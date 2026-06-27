@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import useApi from '@hooks/useApi'
-import type { ShortUrl } from '@components/short-url/list/Card'
+import type { ShortUrl } from '@/types'
 
 function useFetchShortUrls() {
   const api = useApi()

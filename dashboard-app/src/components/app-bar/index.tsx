@@ -6,8 +6,8 @@ const ProfileMenu = React.lazy(() => import('@components/app-bar/profile-menu'))
 
 function AppBar() {
   return (
-    <nav className="sticky top-0 w-full border-b border-border bg-background text-foreground">
-      <div className="w-full max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <nav className="sticky top-0 w-full border-b border-border bg-background text-foreground z-100">
+      <div className="w-full px-4 py-4 flex justify-between items-center">
         <Link
           to="/app"
           className="flex items-center text-2xl font-extrabold tracking-tight">

@@ -9,16 +9,24 @@ import {
   PowerIcon,
   PowerOffIcon,
 } from 'lucide-react'
-import type { ShortUrl } from '@components/short-url/list/Card'
+import type { ShortUrl } from '@/types'
 
-function ShortUrlCardAction({ is_active, short_code }: Pick<ShortUrl, 'is_active' | 'short_code'>) {
+interface Props extends Pick<ShortUrl, 'is_active' | 'short_code'> {
+  loading?: boolean
+  onEdit: () => void
+  onToggleActiveStatus: () => void
+}
+
+function ShortUrlCardAction({ is_active, short_code, loading, onEdit, onToggleActiveStatus }: Props) {
   const ActivationToggleIcon = is_active ? PowerOffIcon : PowerIcon
 
   return (
     <DropDown
       content={(
         <>
-          <DropdownMenuItem className="flex items-center gap-x-2 cursor-pointer">
+          <DropdownMenuItem
+            className="flex items-center gap-x-2 cursor-pointer"
+            onClick={onEdit}>
             <PenIcon className="size-3.5" />
             <span className="text-xs">
               Edit
@@ -34,7 +42,9 @@ function ShortUrlCardAction({ is_active, short_code }: Pick<ShortUrl, 'is_active
               </span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-x-2 cursor-pointer">
+          <DropdownMenuItem
+            className="flex items-center gap-x-2 cursor-pointer"
+            onClick={onToggleActiveStatus}>
             <ActivationToggleIcon className="size-3.5" />
             <span className="text-xs">
               {is_active ? "Deactivate" : "Activate"}
@@ -48,6 +58,7 @@ function ShortUrlCardAction({ is_active, short_code }: Pick<ShortUrl, 'is_active
       <Button
         variant="ghost"
         size="icon-sm"
+        loading={loading}
         className="rounded-md text-sm">
         <EllipsisVerticalIcon />
       </Button>

@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from models.urls import Urls
 from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
 
@@ -33,14 +33,17 @@ class ShortUrlsRepository:
         return url.model_dump()
 
     @staticmethod
-    async def get_destination_url_by_id(
+    async def get_active_destination_url_by_id(
         session: Session,
         id: int,
     ):
-        find_destination_url_statement = select(Urls.destination_url).where(
-            Urls.id == id,
+        destination_url_statement = select(Urls.destination_url).where(
+            and_(
+                Urls.id == id,
+                Urls.is_active == True,
+            )
         )
-        destination_url = session.exec(find_destination_url_statement).first()
+        destination_url = session.exec(destination_url_statement).first()
         return destination_url
 
     @staticmethod

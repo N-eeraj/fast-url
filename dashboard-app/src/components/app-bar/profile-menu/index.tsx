@@ -27,7 +27,7 @@ function ProfileMenu() {
         )}
         contentProps={{
           align: "end",
-          className: "min-w-42 py-1.5 space-y-0.75",
+          className: "min-w-42 py-1.5 space-y-0.75 z-101",
         }}>
         <Button
           variant="ghost"

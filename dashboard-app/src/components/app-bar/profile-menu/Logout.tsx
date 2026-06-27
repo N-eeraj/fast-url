@@ -21,7 +21,9 @@ function Logout({ className = '' }) {
       )}
       onClick={logout}>
       <LogOutIcon className="size-3" />
-      Logout
+      <span>
+        Logout
+      </span>
     </Button>
   )
 }

@@ -3,7 +3,7 @@ import ShortUrlList from "@components/short-url/list"
 
 function Dashboard() {
   return (
-    <div>
+    <div className="pb-16">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">
           Your Links
@@ -12,6 +12,7 @@ function Dashboard() {
           Manage and track your shortened destinations
         </p>
       </div>
+
       <ShortUrlList />
       <CreateShortUrl />
     </div>

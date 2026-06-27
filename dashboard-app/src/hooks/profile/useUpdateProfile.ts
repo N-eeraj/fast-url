@@ -32,9 +32,7 @@ function useUpdateProfile(open: boolean) {
   const api = useApi()
 
   const mutation = useMutation({
-    mutationFn: async (
-      payload: UpdateProfileFormValues,
-    ) => {
+    mutationFn: async (payload: UpdateProfileFormValues) => {
       return await api('/profile', {
         method: 'PATCH',
         body: payload,
@@ -42,11 +40,9 @@ function useUpdateProfile(open: boolean) {
     },
     onSuccess: () => {
       handleSuccess('Profile updated successfully')
-      queryClient.invalidateQueries(
-        {
-          queryKey: ['user'],
-        }
-      )
+      queryClient.invalidateQueries({
+        queryKey: ['user'],
+      })
     },
     onError: (error: unknown) => {
       const errors = handleError(error)

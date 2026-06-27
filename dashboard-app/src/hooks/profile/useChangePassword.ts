@@ -48,9 +48,7 @@ function useChangePassword({ open, onClose }: Args) {
   const api = useApi()
 
   const mutation = useMutation({
-    mutationFn: async (
-      payload: ChangePasswordFormValues,
-    ) => {
+    mutationFn: async (payload: ChangePasswordFormValues) => {
       return await api('/profile/change-password', {
         method: 'PATCH',
         body: {

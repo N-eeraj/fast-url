@@ -23,7 +23,7 @@ def validate_url(url: str):
     return url
 
 # schemas
-class CreateShortUrlModel(BaseModel):
+class ShortUrlModel(BaseModel):
     name: str = Field(
         ...,
         description="A user-provided identifier for the URL shortener entry (used as the URL slug or alias).",
@@ -42,7 +42,7 @@ class CreateShortUrlModel(BaseModel):
         return validate_url(destination_url)
 
 
-class ShortUrlDataModel(CreateShortUrlModel):
+class ShortUrlDataModel(ShortUrlModel):
     user_id: int = Field(
         ...,
         description="Unique identifier of the user who owns the short URL.",

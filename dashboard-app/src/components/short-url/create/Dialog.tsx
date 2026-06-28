@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Dialog from '@components/base/Dialog'
 import CreateSuccess from '@components/short-url/create/Success'
 
-const ShortUrlForm = React.lazy(() => import('@components/short-url/create/Form'))
+const ShortUrlForm = React.lazy(() => import('@components/short-url/Form'))
 
 interface Props {
   open: boolean

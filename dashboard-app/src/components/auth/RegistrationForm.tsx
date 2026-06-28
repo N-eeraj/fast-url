@@ -18,32 +18,28 @@ function RegistrationForm() {
         label="Name"
         error={errors.name?.message}
         placeholder="Enter your name"
-        {...register("name")}
-      />
+        {...register("name")} />
 
       <Input
         label="Email"
         type="email"
         error={errors.email?.message}
         placeholder="Enter your email"
-        {...register("email")}
-      />
+        {...register("email")} />
 
       <Input
         label="Password"
         type="password"
         placeholder="Enter your password"
         error={errors.password?.message}
-        {...register("password")}
-      />
+        {...register("password")} />
 
       <Input
         label="Confirm Password"
         type="password"
         placeholder="Confirm your password"
         error={errors.confirmPassword?.message}
-        {...register("confirmPassword")}
-      />
+        {...register("confirmPassword")} />
 
       <Button
         type="submit"

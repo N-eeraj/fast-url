@@ -1,19 +1,24 @@
 import Input from '@components/base/Input'
 import Button from '@components/base/Button'
-import useCreateShortUrl, { type Args } from '@hooks/shortUrl/useCreateShortUrl'
+import useShortUrlForm, {
+  type OnSuccess,
+  type DefaultValues,
+} from '@hooks/shortUrl/useShortUrlForm'
 
 interface Props {
-  onSuccess: Args
+  onSuccess: OnSuccess
   onCancel: () => void
+  defaultValues?: DefaultValues
 }
 
-function ShortUrlForm({ onSuccess, onCancel }: Props) {
+function ShortUrlForm({ onSuccess, onCancel, defaultValues }: Props) {
   const {
     register,
     errors,
     isSubmitting,
+    isUpdate,
     onSubmit,
-  } = useCreateShortUrl(onSuccess)
+  } = useShortUrlForm(onSuccess, defaultValues)
 
   return (
     <form
@@ -24,16 +29,14 @@ function ShortUrlForm({ onSuccess, onCancel }: Props) {
         placeholder="My Website"
         autoFocus
         error={errors.name?.message}
-        {...register("name")}
-      />
+        {...register("name")} />
 
       <Input
         label="Long URL"
         type="url"
         placeholder="https://example.com/very/long/link"
         error={errors.destination_url?.message}
-        {...register("destination_url")}
-      />
+        {...register("destination_url")} />
 
       <div className="flex items-center gap-2">
         <Button
@@ -49,7 +52,7 @@ function ShortUrlForm({ onSuccess, onCancel }: Props) {
           type="submit"
           className="flex-1"
           loading={isSubmitting}>
-          Generate short link
+          {isUpdate ? "Update Short Link" : "Generate Short Link"}
         </Button>
       </div>
     </form>

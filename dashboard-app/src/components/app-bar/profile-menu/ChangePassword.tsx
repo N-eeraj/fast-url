@@ -27,24 +27,21 @@ function ChangePassword({ open, onClose }: Props) {
           type="password"
           placeholder="Enter your current password"
           error={errors.password?.message}
-          {...register("password")}
-        />
+          {...register("password")} />
 
         <Input
           label="New Password"
           type="password"
           placeholder="Enter your new password"
           error={errors.newPassword?.message}
-          {...register("newPassword")}
-        />
+          {...register("newPassword")} />
 
         <Input
           label="Confirm Password"
           type="password"
           placeholder="Confirm your new password"
           error={errors.confirmPassword?.message}
-          {...register("confirmPassword")}
-        />
+          {...register("confirmPassword")} />
 
         <div className="flex gap-x-2">
           <Button

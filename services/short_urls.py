@@ -1,7 +1,7 @@
 from math import ceil
 from sqlmodel import Session
 from repositories.short_urls import ShortUrlsRepository
-from schemas.short_urls import ShortUrlDataModel, CreateShortUrlModel
+from schemas.short_urls import ShortUrlDataModel, ShortUrlModel
 from utils.generate_short_code import generate_code, recover_id
 
 class ShortUrlsService:
@@ -20,7 +20,7 @@ class ShortUrlsService:
     async def create_short_url(
         session: Session,
         user_id: int,
-        data: CreateShortUrlModel,
+        data: ShortUrlModel,
     ) -> str:
         short_code = await ShortUrlsService.generate_short_code(session)
         redirect = {
@@ -78,6 +78,20 @@ class ShortUrlsService:
         }
 
         return (data, meta_data)
+
+    @staticmethod
+    async def update_short_url(
+        session: Session,
+        id: int,
+        user_id: int,
+        data: ShortUrlModel,
+    ):
+        await ShortUrlsRepository.update_short_url(
+            session=session,
+            id=id,
+            user_id=user_id,
+            data=data.model_dump(),
+        )
 
     @staticmethod
     async def delete_short_url(

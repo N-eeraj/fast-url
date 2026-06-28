@@ -30,16 +30,14 @@ function EditProfile({ open, onClose }: Props) {
           type="text"
           placeholder="Enter your name"
           error={errors.name?.message}
-          {...register("name")}
-        />
+          {...register("name")} />
 
         <Input
           label="Email"
           type="email"
           placeholder="Enter your email"
           error={errors.email?.message}
-          {...register("email")}
-        />
+          {...register("email")} />
 
         <div className="flex gap-x-2">
           <Button

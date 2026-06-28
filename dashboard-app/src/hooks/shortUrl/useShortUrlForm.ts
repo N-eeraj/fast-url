@@ -6,50 +6,63 @@ import useApi from '@hooks/useApi'
 import { queryClient } from '@/QueryProvider'
 import { handleError, toast } from '@utils/toast'
 
-const createShortUrlSchema = z.object({
+const shortUrlSchema = z.object({
   name: z.string('Please enter a name to identify this URL'),
   destination_url: z.url('Please enter a valid URL'),
 })
 
-export type CreateShortUrlFormValues = z.infer<typeof createShortUrlSchema>
-export type Args = (arg: string) => void
+export type ShortUrlFormValues = z.infer<typeof shortUrlSchema>
+export type OnSuccess = (arg: string) => void
+export type DefaultValues = ShortUrlFormValues & {
+  id: number,
+}
 
-function useCreateShortUrl(onSuccess: Args) {
+function useShortUrlForm(
+  onSuccess: OnSuccess,
+  defaultValues: DefaultValues,
+) {
   const api = useApi()
+
+  const isUpdate = Boolean(defaultValues?.id)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<CreateShortUrlFormValues>({
-    resolver: zodResolver(createShortUrlSchema),
-    defaultValues: {
+  } = useForm<ShortUrlFormValues>({
+    resolver: zodResolver(shortUrlSchema),
+    defaultValues: defaultValues ?? {
       name: '',
       destination_url: '',
     },
   })
 
   const mutation = useMutation({
-    mutationFn: async (payload: CreateShortUrlFormValues) => {
-      return await api('/short-urls', {
-        method: 'POST',
+    mutationFn: async (payload: ShortUrlFormValues) => {
+      const endpoint = isUpdate ? `/short-urls/${defaultValues.id}` : '/short-urls'
+      const method = isUpdate ? 'PATCH' : 'POST'
+
+      return await api(endpoint, {
+        method,
         body: payload,
       })
     },
 
     onSuccess: (response: any) => {
+      queryClient.invalidateQueries({
+        queryKey: ['short-urls'],
+      })
+
       const shortCode = response?.data?.short_code
+
+      onSuccess(shortCode)
+
+      if (isUpdate) return
       if (!shortCode) {
         toast.error('Failed to shorten URL')
         return
       }
-
-      onSuccess(shortCode)
-
-      queryClient.invalidateQueries({
-        queryKey: ['short-urls'],
-      })
     },
 
     onError: (error: unknown) => {
@@ -58,7 +71,7 @@ function useCreateShortUrl(onSuccess: Args) {
       if (!errors) return
 
       Object.keys(errors).forEach((field) => {
-        setError(field as keyof CreateShortUrlFormValues, {
+        setError(field as keyof ShortUrlFormValues, {
           message: errors[field as keyof typeof errors],
         })
       })
@@ -72,9 +85,10 @@ function useCreateShortUrl(onSuccess: Args) {
   return {
     register,
     errors,
+    isUpdate,
     onSubmit,
     isSubmitting: mutation.isPending,
   }
 }
 
-export default useCreateShortUrl
+export default useShortUrlForm

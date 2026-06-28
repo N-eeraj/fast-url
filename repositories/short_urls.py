@@ -1,7 +1,7 @@
 from sqlmodel import Session, select, update, delete, func
 from sqlalchemy import or_, and_, not_
 from models.urls import Urls
-from schemas.short_urls import ShortUrlDataModel, ShortUrlRecordModel
+from schemas.short_urls import ShortUrlModel, ShortUrlDataModel, ShortUrlRecordModel
 
 class ShortUrlsRepository:
     @staticmethod
@@ -93,10 +93,28 @@ class ShortUrlsRepository:
         return (short_url_list, total_count)
 
     @staticmethod
+    async def update_short_url(
+        session: Session,
+        id: int,
+        user_id: int,
+        data: ShortUrlModel,
+    ):
+        update_short_url_statement = update(Urls).where(
+            and_(
+                Urls.id == id,
+                Urls.user_id == user_id,
+            )
+        ).values(
+            **data,
+        )
+        session.exec(update_short_url_statement)
+        session.commit()
+
+    @staticmethod
     async def delete_short_url(
         session: Session,
         id: int,
-        user_id: int
+        user_id: int,
     ):
         delete_short_url_statement = delete(Urls).where(
             and_(
@@ -111,7 +129,7 @@ class ShortUrlsRepository:
     async def toggle_active_status(
         session: Session,
         id: int,
-        user_id: int
+        user_id: int,
     ):
         toggle_active_status_statement = update(Urls).where(
             and_(

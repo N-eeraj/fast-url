@@ -19,16 +19,14 @@ function LoginForm() {
         type="email"
         placeholder="Enter your email"
         error={errors.email?.message}
-        {...register("email")}
-      />
+        {...register("email")} />
 
       <Input
         label="Password"
         type="password"
         placeholder="Enter your password"
         error={errors.password?.message}
-        {...register("password")}
-      />
+        {...register("password")} />
 
       <Button
         type="submit"

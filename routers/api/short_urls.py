@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from dependencies.require_user import require_user
 from sqlmodel import Session
 from database import get_session
-from schemas.short_urls import CreateShortUrlModel
+from schemas.short_urls import ShortUrlModel
 from services.short_urls import ShortUrlsService
 
 router = APIRouter(
@@ -17,7 +17,7 @@ ROOT = ""
 @router.post(ROOT, response_class=JSONResponse)
 async def create_short_url(
     request: Request,
-    body: CreateShortUrlModel,
+    body: ShortUrlModel,
     session: Session=Depends(get_session),
 ):
     data = await ShortUrlsService.create_short_url(
@@ -61,6 +61,26 @@ async def get_user_short_urls(
         "meta": meta_data
     }
 
+@router.patch("/{id}", response_class=JSONResponse)
+async def update_short_url(
+    request: Request,
+    id: int,
+    body: ShortUrlModel,
+    session: Session=Depends(get_session),
+):
+    await ShortUrlsService.update_short_url(
+        session=session,
+        id=id,
+        user_id=request.state.user["id"],
+        data=body,
+    )
+
+    return {
+        "success": True,
+        "message": "Updated Short URL Successfully",
+    }
+
+
 @router.delete("/{id}", response_class=JSONResponse)
 async def delete_short_url(
     request: Request,
@@ -75,7 +95,7 @@ async def delete_short_url(
 
     return {
         "success": True,
-        "message": "Deleted URL Successfully",
+        "message": "Deleted Short URL Successfully",
     }
 
 @router.patch("/{id}/toggle-status", response_class=JSONResponse)

@@ -8,8 +8,8 @@ import {
 } from 'react'
 import { Input } from '@components/ui/input'
 import { Button } from '@components/ui/button'
-import { cn } from '@/lib/utils'
 import { EyeIcon, EyeClosedIcon } from 'lucide-react'
+import clsx from 'clsx'
 
 interface Props extends ComponentProps<typeof Input> {
   label?: string
@@ -40,7 +40,7 @@ export default function BaseInput({
   const Wrapper = label ? 'div' : Fragment
   const wrapperProps = label ? {
     ...labelWrapperProps,
-    className: cn(
+    className: clsx(
       className,
       labelWrapperProps.className,
       'flex flex-col gap-y-1',
@@ -61,16 +61,15 @@ export default function BaseInput({
 
       <div
         {...inputWrapperProps}
-        className={cn(
+        className={clsx(
           inputWrapperProps.className,
           "relative",
         )}>
         <Input
           id={id}
           type={type === "password" ? inputType : type}
-          className={cn(className, 'placeholder:text-xs text-sm')}
-          {...props}
-        />
+          className={clsx(className, 'placeholder:text-xs text-sm')}
+          {...props} />
 
         {type === "password" && (
           <Button

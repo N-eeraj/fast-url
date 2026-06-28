@@ -1,6 +1,13 @@
+import ShortUrlAnalyticsContextProvider from '@contexts/ShortUrlAnalytics'
+import AnalyticsFilter from '@components/short-url/analytics/Filter'
+
 function ViewShortUrl() {
   return (
-    <div>ViewShortUrl</div>
+    <section>
+      <ShortUrlAnalyticsContextProvider>
+        <AnalyticsFilter />
+      </ShortUrlAnalyticsContextProvider>
+    </section>
   )
 }
 

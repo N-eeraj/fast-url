@@ -36,15 +36,18 @@ class ShortUrlsRepository:
     async def get_active_destination_url_by_id(
         session: Session,
         id: int,
-    ):
-        destination_url_statement = select(Urls.destination_url).where(
+    ) -> tuple[str, int] | None:
+        short_url_statement = select(
+            Urls.destination_url,
+            Urls.user_id,
+        ).where(
             and_(
                 Urls.id == id,
                 Urls.is_active == True,
             )
         )
-        destination_url = session.exec(destination_url_statement).first()
-        return destination_url
+        short_url = session.exec(short_url_statement).first()
+        return short_url
 
     @staticmethod
     async def get_short_url_list(

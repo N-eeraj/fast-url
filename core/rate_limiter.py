@@ -13,10 +13,16 @@ storage = MemoryStorage()
 limiter = FixedWindowRateLimiter(storage)
 
 AUTHENTICATED_USER_REQUESTS_PER_MINUTE = 60
+REDIRECTS_REQUESTS_PER_MINUTE = 120
 
 AUTH_USER_RULE = RateLimitRule(
     bucket="user",
     limit=RateLimitItemPerMinute(AUTHENTICATED_USER_REQUESTS_PER_MINUTE),
+)
+
+REDIRECT_RULE = RateLimitRule(
+    bucket="redirect",
+    limit=RateLimitItemPerMinute(REDIRECTS_REQUESTS_PER_MINUTE),
 )
 
 def check_rate_limit(

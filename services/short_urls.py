@@ -43,18 +43,18 @@ class ShortUrlsService:
     async def get_redirect_url(
         session: Session,
         short_code: str
-    ) -> str | None:
+    ) -> tuple[str, int] | None:
         url_id = recover_id(short_code)
 
         if not url_id:
             return None
 
-        redirect_url = await ShortUrlsRepository.get_active_destination_url_by_id(
+        short_url = await ShortUrlsRepository.get_active_destination_url_by_id(
             session=session,
             id=url_id,
         )
 
-        return redirect_url
+        return short_url
 
     @staticmethod
     async def get_short_url_list(

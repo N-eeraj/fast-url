@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Query, Request, Depends
 from fastapi.responses import JSONResponse
 from dependencies.require_user import require_user
 from dependencies.rate_limiter.user_rate_limiter import user_rate_limiter
 from sqlmodel import Session
 from database import get_session
+from datetime import datetime
 from schemas.short_urls import ShortUrlModel
 from services.short_urls import ShortUrlsService
 
@@ -117,4 +118,26 @@ async def toggle_active_status(
     return {
         "success": True,
         "message": "Updated Status Successfully",
+    }
+
+@router.get("/{short_code}/analytics", response_class=JSONResponse)
+async def get_short_url_analytics(
+    request: Request,
+    short_code: str,
+    from_datetime: datetime=Query(alias="from"),
+    to_datetime: datetime=Query(alias="to"),
+    session: Session=Depends(get_session),
+):
+    data = await ShortUrlsService.get_short_url_analytics(
+        session=session,
+        user_id=request.state.user["id"],
+        short_code=short_code,
+        from_datetime=from_datetime,
+        to_datetime=to_datetime,
+    )
+
+    return {
+        "success": True,
+        "message": "Fetched Analytics Successfully",
+        "data": data,
     }

@@ -34,7 +34,74 @@ const DATE_OPTIONS = [
   },
 ] as const
 
-type Range = typeof DATE_OPTIONS[number]["value"]
+type Range = typeof DATE_OPTIONS[number]['value']
+interface FilterParams {
+  isCustom: boolean
+  range: Range
+  from: string
+  to: string
+}
+
+function getFilterDates({
+  isCustom,
+  range,
+  from,
+  to,
+}: FilterParams) {
+  const now = new Date()
+
+  let fromDate: Date
+  let toDate = now
+
+  if (isCustom) {
+    fromDate = new Date(from)
+    toDate = new Date(to)
+  } else {
+    switch (range ?? 'last_week') {
+      case 'last_hour':
+        fromDate = new Date(now.getTime() - 60 * 60 * 1000)
+        break
+
+      case 'today':
+        fromDate = new Date(now)
+        fromDate.setHours(0, 0, 0, 0)
+        break
+
+      case 'yesterday':
+        fromDate = new Date(now)
+        fromDate.setDate(fromDate.getDate() - 1)
+        fromDate.setHours(0, 0, 0, 0)
+
+        toDate = new Date(fromDate)
+        toDate.setHours(23, 59, 59, 999)
+        break
+
+      case 'last_month':
+        fromDate = new Date(now)
+        fromDate.setDate(fromDate.getDate() - 30)
+        fromDate.setHours(0, 0, 0, 0)
+        break
+
+      case 'last_year':
+        fromDate = new Date(now)
+        fromDate.setFullYear(fromDate.getFullYear() - 1)
+        fromDate.setHours(0, 0, 0, 0)
+        break
+
+      case 'last_week':
+      default:
+        fromDate = new Date(now)
+        fromDate.setDate(fromDate.getDate() - 7)
+        fromDate.setHours(0, 0, 0, 0)
+        break
+    }
+  }
+
+  return {
+    fromDate,
+    toDate,
+  }
+}
 
 export default function useShortUrlAnalytics() {
   const api = useApi()
@@ -47,59 +114,23 @@ export default function useShortUrlAnalytics() {
 
   const isCustom = range === 'custom'
 
-  const query = useQuery({
+  const {
+    data: timeline,
+    isPending: isLoadingTimeline,
+  } = useQuery({
     queryKey: ['short-url-analytics', shortCode, range, from, to],
     enabled: !!shortCode,
     queryFn: async () => {
-      const now = new Date()
 
-      let fromDate: Date
-      let toDate = now
-
-      if (isCustom) {
-        fromDate = new Date(from)
-        toDate = new Date(to)
-      } else {
-        switch (range ?? 'last_week') {
-          case 'last_hour':
-            fromDate = new Date(now.getTime() - 60 * 60 * 1000)
-            break
-
-          case 'today':
-            fromDate = new Date(now)
-            fromDate.setHours(0, 0, 0, 0)
-            break
-
-          case 'yesterday':
-            fromDate = new Date(now)
-            fromDate.setDate(fromDate.getDate() - 1)
-            fromDate.setHours(0, 0, 0, 0)
-
-            toDate = new Date(fromDate)
-            toDate.setHours(23, 59, 59, 999)
-            break
-
-          case 'last_month':
-            fromDate = new Date(now)
-            fromDate.setDate(fromDate.getDate() - 30)
-            fromDate.setHours(0, 0, 0, 0)
-            break
-
-          case 'last_year':
-            fromDate = new Date(now)
-            fromDate.setFullYear(fromDate.getFullYear() - 1)
-            fromDate.setHours(0, 0, 0, 0)
-            break
-
-          case 'last_week':
-          default:
-            fromDate = new Date(now)
-            fromDate.setDate(fromDate.getDate() - 7)
-            fromDate.setHours(0, 0, 0, 0)
-            break
-        }
-      }
-
+      const {
+        fromDate,
+        toDate,
+      } = getFilterDates({
+        isCustom,
+        range,
+        from,
+        to,
+      })
       const response = await api(`/short-urls/${shortCode}/analytics`, {
         query: {
           from: fromDate.toISOString(),
@@ -110,12 +141,13 @@ export default function useShortUrlAnalytics() {
       if (
         response &&
         typeof response === 'object' &&
-        'data' in response
+        'data' in response &&
+        Array.isArray(response.data)
       ) {
-        return response.data
+        return response.data.map((datetime) => new Date(datetime))
       }
 
-      return null
+      return []
     }
   })
 
@@ -138,7 +170,8 @@ export default function useShortUrlAnalytics() {
 
   return {
     dateOptions: DATE_OPTIONS as unknown as Option[],
-    ...query,
+    timeline,
+    isLoadingTimeline,
     range: range ?? 'last_week',
     from,
     to,

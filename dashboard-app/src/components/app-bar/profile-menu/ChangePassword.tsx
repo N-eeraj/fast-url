@@ -1,9 +1,9 @@
 import Dialog from '@components/base/Dialog'
 import Input from '@components/base/Input'
 import Button from '@components/base/Button'
-import useChangePassword, { type Args } from '@hooks/profile/useChangePassword'
+import useChangePassword, { type Params } from '@hooks/profile/useChangePassword'
 
-interface Props extends Args {}
+interface Props extends Params {}
 
 function ChangePassword({ open, onClose }: Props) {
   const {

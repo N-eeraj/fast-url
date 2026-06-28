@@ -130,3 +130,20 @@ class ShortUrlsService:
             short_code=short_code,
             visited_at=visited_at,
         )
+
+    @staticmethod
+    async def get_short_url_analytics(
+        session: Session,
+        user_id: int,
+        short_code: str,
+        from_datetime: datetime,
+        to_datetime: datetime,
+    ):
+        data = await ShortUrlLogsRepository.get_short_url_analytics(
+            session=session,
+            user_id=user_id,
+            short_code=short_code,
+            from_datetime=from_datetime,
+            to_datetime=to_datetime,
+        )
+        return data

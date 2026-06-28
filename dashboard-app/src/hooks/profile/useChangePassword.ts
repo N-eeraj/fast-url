@@ -29,12 +29,12 @@ const changePasswordSchema = z
 
 export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>
 
-export interface Args {
+export interface Params {
   open: boolean
   onClose: () => void
 }
 
-function useChangePassword({ open, onClose }: Args) {
+function useChangePassword({ open, onClose }: Params) {
   const {
     register,
     handleSubmit,

@@ -1,4 +1,4 @@
-from fastapi import Request, Depends, status
+from fastapi import Request, Response, Depends, status
 from fastapi.exceptions import HTTPException
 from repositories.user import UserRepository
 from sqlmodel import Session
@@ -12,10 +12,12 @@ settings = Settings()
 
 async def require_user(
     request: Request,
+    response: Response,
     session: Session=Depends(get_session),
 ) -> CurrentUserModel:
     auth_token = request.cookies.get("auth_token")
     if not auth_token:
+        response.delete_cookie(key="auth_token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
@@ -31,6 +33,7 @@ async def require_user(
     user = await UserRepository.get_user_by_token(session, hashed_token)
 
     if not user:
+        response.delete_cookie(key="auth_token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={

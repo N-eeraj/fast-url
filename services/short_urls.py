@@ -1,6 +1,8 @@
 from math import ceil
+from datetime import datetime
 from sqlmodel import Session
 from repositories.short_urls import ShortUrlsRepository
+from repositories.short_url_logs import ShortUrlLogsRepository
 from schemas.short_urls import ShortUrlDataModel, ShortUrlModel
 from utils.generate_short_code import generate_code, recover_id
 
@@ -115,4 +117,16 @@ class ShortUrlsService:
             session=session,
             id=id,
             user_id=user_id,
+        )
+
+    @staticmethod
+    async def log_short_url_visit(
+        session: Session,
+        short_code: str,
+        visited_at: datetime,
+    ):
+        await ShortUrlLogsRepository.create_log(
+            session=session,
+            short_code=short_code,
+            visited_at=visited_at,
         )

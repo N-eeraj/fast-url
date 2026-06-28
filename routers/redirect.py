@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Request, Depends, status
+from fastapi import APIRouter, Request, Depends, BackgroundTasks, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.exceptions import HTTPException
 from sqlmodel import Session
 from database import get_session
+from datetime import datetime
 from services.short_urls import ShortUrlsService
 from core.templates import templates
 from core.rate_limiter import REDIRECT_RULE, check_rate_limit
@@ -12,6 +13,7 @@ router = APIRouter()
 @router.get("/{path:path}", response_class=HTMLResponse)
 async def redirect_route(
     request: Request,
+    background_tasks: BackgroundTasks,
     session: Session=Depends(get_session),
 ):
     short_code = request.path_params["path"]
@@ -47,6 +49,13 @@ async def redirect_route(
                 "message": "Too much requests, please try again later",
             },
         )
+
+    background_tasks.add_task(
+        ShortUrlsService.log_short_url_visit,
+        session,
+        short_code,
+        datetime.now(),
+    )
 
     return RedirectResponse(
         url=destination_url,

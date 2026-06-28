@@ -4,7 +4,6 @@ from sqlmodel import Session
 from services.auth import AuthService
 from database import get_session
 from dependencies.require_user import require_user
-from schemas.auth import CurrentUserModel
 
 router = APIRouter(
     prefix="/auth",

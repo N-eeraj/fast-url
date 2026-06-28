@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import JSONResponse
 from dependencies.require_user import require_user
+from dependencies.rate_limiter.user_rate_limiter import user_rate_limiter
 from sqlmodel import Session
 from database import get_session
 from services.profile import ProfileService
@@ -10,7 +11,10 @@ from schemas.profile import UpdateProfileModel, UpdatePasswordModel
 router = APIRouter(
     prefix="/profile",
     tags=["profile"],
-    dependencies=[Depends(require_user)],
+    dependencies=[
+        Depends(require_user),
+        Depends(user_rate_limiter),
+    ],
 )
 
 ROOT = ""

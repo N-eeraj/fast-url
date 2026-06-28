@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import JSONResponse
 from dependencies.require_user import require_user
+from dependencies.rate_limiter.user_rate_limiter import user_rate_limiter
 from sqlmodel import Session
 from database import get_session
 from schemas.short_urls import ShortUrlModel
@@ -9,7 +10,10 @@ from services.short_urls import ShortUrlsService
 router = APIRouter(
     prefix="/short-urls",
     tags=["short-urls"],
-    dependencies=[Depends(require_user)],
+    dependencies=[
+        Depends(require_user),
+        Depends(user_rate_limiter),
+    ],
 )
 
 ROOT = ""

@@ -34,7 +34,7 @@ const DATE_OPTIONS = [
   },
 ] as const
 
-type Range = typeof DATE_OPTIONS[number]['value']
+export type Range = typeof DATE_OPTIONS[number]['value']
 interface FilterParams {
   isCustom: boolean
   range: Range
@@ -127,9 +127,9 @@ export default function useShortUrlAnalytics() {
         toDate,
       } = getFilterDates({
         isCustom,
-        range,
-        from,
-        to,
+        range: range as Range,
+        from: from as string,
+        to: to as string,
       })
       const response = await api(`/short-urls/${shortCode}/analytics`, {
         query: {

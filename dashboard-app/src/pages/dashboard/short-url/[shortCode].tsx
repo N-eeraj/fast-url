@@ -6,8 +6,8 @@ function ViewShortUrl() {
   return (
     <section>
       <ShortUrlAnalyticsContextProvider>
-        <TimeSeries />
         <AnalyticsFilter />
+        <TimeSeries />
       </ShortUrlAnalyticsContextProvider>
     </section>
   )

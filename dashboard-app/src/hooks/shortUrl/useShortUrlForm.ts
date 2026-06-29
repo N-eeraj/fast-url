@@ -19,7 +19,7 @@ export type DefaultValues = ShortUrlFormValues & {
 
 function useShortUrlForm(
   onSuccess: OnSuccess,
-  defaultValues: DefaultValues,
+  defaultValues: DefaultValues | undefined,
 ) {
   const api = useApi()
 
@@ -40,7 +40,7 @@ function useShortUrlForm(
 
   const mutation = useMutation({
     mutationFn: async (payload: ShortUrlFormValues) => {
-      const endpoint = isUpdate ? `/short-urls/${defaultValues.id}` : '/short-urls'
+      const endpoint = isUpdate ? `/short-urls/${defaultValues?.id}` : '/short-urls'
       const method = isUpdate ? 'PATCH' : 'POST'
 
       return await api(endpoint, {

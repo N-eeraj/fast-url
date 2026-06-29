@@ -67,7 +67,7 @@ function ShortUrlData() {
 
         <div className="flex items-center gap-x-1">
           <a
-            href={is_active ? shortenedUrl : null}
+            href={is_active ? shortenedUrl : undefined}
             target="_blank"
             title={is_active ? "Shortened URL" : "This URL is inactive"}
             className={clsx(

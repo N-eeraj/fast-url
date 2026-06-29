@@ -14,7 +14,7 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
   const [copied, setCopied] = useState(false)
   const [openEditDialog, setOpenEditDialog] = useState(false)
   const [openToggleStatusConfirmation, setOpenToggleStatusConfirmation] = useState(false)
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(null)
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false)
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(shortenedUrl)
@@ -34,7 +34,17 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
         method: 'PATCH',
       })
     },
-    onSuccess: ({ message }) => {
+    onSuccess: (response) => {
+      let message = 'Updated Short URL Successfully'
+      if (
+        response &&
+        typeof response === 'object' &&
+        'message' in response &&
+        response.message &&
+        typeof response.message === 'string'
+      ) {
+        message = response.message
+      }
       handleSuccess(message)
       queryClient.invalidateQueries({
         queryKey: ['short-urls'],
@@ -57,7 +67,17 @@ function useShortUrlCard({ id, is_active, short_code }: ShortUrl) {
         method: 'DELETE',
       })
     },
-    onSuccess: ({ message }) => {
+    onSuccess: (response) => {
+      let message = 'Deleted Short URL Successfully'
+      if (
+        response &&
+        typeof response === 'object' &&
+        'message' in response &&
+        response.message &&
+        typeof response.message === 'string'
+      ) {
+        message = response.message
+      }
       handleSuccess(message)
       queryClient.invalidateQueries({
         queryKey: ['short-urls'],

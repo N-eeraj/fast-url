@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import useApi from '@hooks/useApi'
 import type { Option } from '@components/base/Select'
+import { toast } from '@utils/toast'
 
 const DATE_OPTIONS = [
   {
@@ -117,11 +119,11 @@ export default function useShortUrlAnalytics() {
   const {
     data: timeline,
     isPending: isLoadingTimeline,
+    error: errorFetchingTimeline,
   } = useQuery({
     queryKey: ['short-url-analytics', shortCode, range, from, to],
     enabled: !!shortCode,
     queryFn: async () => {
-
       const {
         fromDate,
         toDate,
@@ -131,6 +133,8 @@ export default function useShortUrlAnalytics() {
         from: from as string,
         to: to as string,
       })
+      if (range === 'custom' && !(from && to)) return []
+
       const response = await api(`/short-urls/${shortCode}/analytics`, {
         query: {
           from: fromDate.toISOString(),
@@ -148,8 +152,15 @@ export default function useShortUrlAnalytics() {
       }
 
       return []
-    }
+    },
   })
+
+  useEffect(() => {
+    if (!errorFetchingTimeline) return
+    toast.error(errorFetchingTimeline.message)
+  }, [
+    errorFetchingTimeline,
+  ])
 
   const setRange = (newRange: Range) => {
     const params = new URLSearchParams(searchParams)

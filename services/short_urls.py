@@ -1,5 +1,7 @@
+from fastapi import status
+from fastapi.exceptions import HTTPException
 from math import ceil
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlmodel import Session
 from repositories.short_urls import ShortUrlsRepository
 from repositories.short_url_logs import ShortUrlLogsRepository
@@ -7,6 +9,9 @@ from schemas.short_urls import ShortUrlDataModel, ShortUrlModel
 from utils.generate_short_code import generate_code, recover_id
 
 class ShortUrlsService:
+    MIN_ANALYTICS_INTERVAL = timedelta(minutes=1)
+    MAX_ANALYTICS_INTERVAL = timedelta(days=366)
+
     @staticmethod
     async def generate_short_code(
         session: Session,
@@ -130,6 +135,37 @@ class ShortUrlsService:
             short_code=short_code,
             visited_at=visited_at,
         )
+
+    @staticmethod
+    def validate_analytics_interval(
+        from_datetime: datetime,
+        to_datetime: datetime,
+    ):
+        if from_datetime >= to_datetime:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Please select valid from and to date times",
+                }
+            )
+
+        interval = to_datetime - from_datetime
+
+        if interval < ShortUrlsService.MIN_ANALYTICS_INTERVAL:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Please select a larger range of at least 1 minute",
+                }
+            )
+
+        if interval > ShortUrlsService.MAX_ANALYTICS_INTERVAL:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "message": "Please select a shorter range of at most 1 year",
+                }
+            )
 
     @staticmethod
     async def get_short_url_analytics(

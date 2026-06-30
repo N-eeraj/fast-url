@@ -128,6 +128,11 @@ async def get_short_url_analytics(
     to_datetime: datetime=Query(alias="to"),
     session: Session=Depends(get_session),
 ):
+    ShortUrlsService.validate_analytics_interval(
+        from_datetime=from_datetime,
+        to_datetime=to_datetime,
+    )
+
     data = await ShortUrlsService.get_short_url_analytics(
         session=session,
         user_id=request.state.user["id"],

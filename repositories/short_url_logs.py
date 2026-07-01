@@ -11,8 +11,14 @@ class ShortUrlLogsRepository:
         short_code: str,
         visited_at: datetime,
     ):
+        user_id_fetch_statement = select(Urls.user_id).where(
+            Urls.short_code == short_code,
+        )
+        url_user_id = session.exec(user_id_fetch_statement).first()
+
         short_url_log = ShortUrlLogs(
             short_code=short_code,
+            user_id=url_user_id,
             visited_at=visited_at,
         )
         session.add(short_url_log)

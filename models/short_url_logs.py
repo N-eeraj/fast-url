@@ -23,6 +23,17 @@ class ShortUrlLogs(SQLModel, table=True):
         )
     )
 
+    user_id: int = Field(
+        sa_column=Column(
+            ForeignKey(
+                "users.id",
+                ondelete="CASCADE",
+            ),
+            index=True,
+            nullable=False,
+        )
+    )
+
     visited_at: datetime = Field(
         nullable=False,
         index=True,

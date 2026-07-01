@@ -1,4 +1,4 @@
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
 import models
 from config import Settings
 

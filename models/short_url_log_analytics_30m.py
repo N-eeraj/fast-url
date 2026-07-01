@@ -2,13 +2,18 @@ from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, ForeignKey, String
 from datetime import datetime
 
-class ShortUrlLogs(SQLModel, table=True):
-    __tablename__= "short_url_logs"
+class ShortUrlLogsAnalytics30m(SQLModel, table=True):
+    __tablename__= "short_url_log_analytics_30m"
 
     id: int | None = Field(
         default=None,
         primary_key=True,
         nullable=False,
+    )
+
+    bucket_start: datetime = Field(
+        nullable=False,
+        index=True,
     )
 
     short_code: str = Field(
@@ -34,7 +39,7 @@ class ShortUrlLogs(SQLModel, table=True):
         )
     )
 
-    visited_at: datetime = Field(
+    count: int = Field(
+        default=0,
         nullable=False,
-        index=True,
     )
